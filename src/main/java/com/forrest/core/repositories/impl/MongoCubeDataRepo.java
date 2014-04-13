@@ -1,4 +1,6 @@
-package com.forrest.core.repositories;
+package com.forrest.core.repositories.impl;
+
+import com.forrest.core.repositories.CubeDataRepo;
 
 /**
  * @author David Gilmore
