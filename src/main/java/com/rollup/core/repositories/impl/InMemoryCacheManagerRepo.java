@@ -22,25 +22,25 @@ public class InMemoryCacheManagerRepo implements CacheManagerRepo {
     }
 
     @Override
-    public HashMap<String, String> getDomain(String domain) {
-        return this.domains.get(domain);
+    public HashMap<String, String> getResource(String resource) {
+        return this.domains.get(resource);
     }
 
     @Override
-    public void createDomain(String domain) {
-        domains.put(domain, new HashMap<>());
+    public void createResource(String resource) {
+        domains.put(resource, new HashMap<>());
     }
 
     @Override
-    public String getQuery(String domain, String view) {
-        return domains.get(domain).get(view);
+    public String getQuery(String resource, String view) {
+        return domains.get(resource).get(view);
     }
 
     @Override
-    public boolean getQueryExists(String domain, String view, String... where) {
+    public boolean getQueryExists(String resource, String view, String... where) {
         return false;
     }
 
     @Override
-    public void setQueryExists(String domain, String view, String... where) {}
+    public void setQueryExists(String resource, String view, String... where) {}
 }

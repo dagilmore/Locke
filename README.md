@@ -1,4 +1,4 @@
 RollUp
 =======
 
-Injest and create a Restful API for any dataset
+Abstract common HOLAP operations to an HTTP interface.

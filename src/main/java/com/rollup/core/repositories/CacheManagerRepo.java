@@ -1,5 +1,7 @@
 package com.rollup.core.repositories;
 
+import com.rollup.core.error.QueryDoesNotExistException;
+
 import java.util.HashMap;
 
 /**
@@ -10,42 +12,42 @@ public interface CacheManagerRepo {
 
     /**
      *
-     * @param domain
+     * @param resource
      * @return
      */
-    HashMap<String, String> getDomain(String domain);
+    HashMap<String, String> getResource(String resource);
 
 
     /**
      *
-     * @param domain
+     * @param resource
      * @return
      */
-    void createDomain(String domain);
+    void createResource(String resource);
 
     /**
      *
-     * @param domain
+     * @param resource
      * @param view
      * @return
      */
-    String getQuery(String domain, String view);
+    String getQuery(String resource, String view) throws QueryDoesNotExistException;
 
     /**
      *
-     * @param domain
-     * @param view
-     * @param where
-     * @return
-     */
-    boolean getQueryExists(String domain, String view, String... where);
-
-    /**
-     *
-     * @param domain
+     * @param resource
      * @param view
      * @param where
+     * @return
      */
-    void setQueryExists(String domain, String view, String... where);
+    boolean getQueryExists(String resource, String view, String... where);
+
+    /**
+     *
+     * @param resource
+     * @param view
+     * @param where
+     */
+    void setQueryExists(String resource, String view, String... where);
 
 }
