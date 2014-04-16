@@ -46,11 +46,7 @@
             <version>${spring.version}</version>
         </dependency>
 
-<<<<<<< HEAD
-        <!-- Java byte code assist -->
-=======
     <!-- Java byte code assist -->
->>>>>>> a3bdceeb1b3bfd655054799c82ce880c8d51b0c1
 
         <dependency>
             <groupId>javassist</groupId>
@@ -226,12 +222,6 @@
             <version>3.3</version>
         </dependency>
 
-        <dependency>
-            <groupId>colt</groupId>
-            <artifactId>colt</artifactId>
-            <version>1.2.0</version>
-        </dependency>
-
     </dependencies>
 
     <repositories>
@@ -319,7 +309,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <includes>
-                        <include>**/*Tests.java</include>
+                        <include>**/*Test.java</include>
                     </includes>
                 </configuration>
             </plugin>
