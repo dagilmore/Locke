@@ -1,6 +1,7 @@
-package com.forrest.core.services.ingestion;
+package com.rollup.datamart.ingestion;
 
-import com.forrest.config.StandaloneConfig;
+import com.rollup.config.StandaloneConfig;
+import com.rollup.datamart.InjestJob;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
