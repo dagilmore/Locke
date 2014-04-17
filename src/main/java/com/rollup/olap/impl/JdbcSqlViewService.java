@@ -1,6 +1,6 @@
-package com.rollup.olap.services.impl;
+package com.rollup.olap.impl;
 
-import com.rollup.olap.services.ViewService;
+import com.rollup.olap.ViewService;
 
 import java.util.Map;
 

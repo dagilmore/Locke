@@ -1,4 +1,4 @@
-package com.rollup.olap.services;
+package com.rollup.olap;
 
 import java.util.Map;
 

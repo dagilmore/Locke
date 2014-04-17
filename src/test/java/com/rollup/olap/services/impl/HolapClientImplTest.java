@@ -1,10 +1,10 @@
 package com.rollup.olap.services.impl;
 
 import com.rollup.olap.DataTree;
-import com.rollup.olap.repositories.CacheManagerRepo;
-import com.rollup.olap.repositories.CubeDataRepo;
-import com.rollup.olap.repositories.WarehouseRepo;
-import com.rollup.olap.services.DataService;
+import com.rollup.olap.CacheManagerRepo;
+import com.rollup.olap.CubeDataRepo;
+import com.rollup.olap.WarehouseRepo;
+import com.rollup.olap.HolapClient;
 import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,13 +16,13 @@ import static org.easymock.EasyMock.expect;
  * @author David Gilmore
  * @date 4/13/14
  */
-public class DataServiceImplTest {
+public class HolapClientImplTest {
 
     private IMocksControl control;
     private CacheManagerRepo cacheManagerMock;
     private CubeDataRepo cubeRepoMock;
     private WarehouseRepo warehouseRepoMock;
-    private DataService dataService;
+    private HolapClient holapClient;
 
     @Before
     public void setUp() throws Exception {
@@ -33,13 +33,13 @@ public class DataServiceImplTest {
         this.cubeRepoMock = this.control.createMock(CubeDataRepo.class);
         this.warehouseRepoMock = this.control.createMock(WarehouseRepo.class);
 
-        DataServiceImpl dataServiceImpl = new DataServiceImpl();
+        HolapClientImpl dataServiceImpl = new HolapClientImpl();
 
         dataServiceImpl.setCacheManager(this.cacheManagerMock);
         dataServiceImpl.setCubeRepo(this.cubeRepoMock);
         dataServiceImpl.setWarehouseRepo(this.warehouseRepoMock);
 
-        this.dataService = dataServiceImpl;
+        this.holapClient = dataServiceImpl;
     }
 
     @Test
@@ -51,7 +51,7 @@ public class DataServiceImplTest {
 
         this.control.replay();
 
-        this.dataService.query("resource", "resource_view", "cond1=cond2");
+        this.holapClient.query("resource", "resource_view", "cond1=cond2");
 
         this.control.verify();
     }
@@ -65,7 +65,7 @@ public class DataServiceImplTest {
 
         this.control.replay();
 
-        this.dataService.query("resource", "resource_view", "cond1=cond2");
+        this.holapClient.query("resource", "resource_view", "cond1=cond2");
 
         this.control.verify();
     }

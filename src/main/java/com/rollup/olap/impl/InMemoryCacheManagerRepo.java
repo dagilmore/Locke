@@ -1,6 +1,6 @@
-package com.rollup.olap.repositories.impl;
+package com.rollup.olap.impl;
 
-import com.rollup.olap.repositories.CacheManagerRepo;
+import com.rollup.olap.CacheManagerRepo;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;

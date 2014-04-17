@@ -1,4 +1,4 @@
-package com.rollup.olap.repositories;
+package com.rollup.olap;
 
 import com.rollup.olap.DataTree;
 

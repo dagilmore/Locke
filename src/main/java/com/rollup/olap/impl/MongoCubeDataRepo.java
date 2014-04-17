@@ -1,8 +1,8 @@
-package com.rollup.olap.repositories.impl;
+package com.rollup.olap.impl;
 
 import com.google.code.morphia.Datastore;
 import com.rollup.olap.DataTree;
-import com.rollup.olap.repositories.CubeDataRepo;
+import com.rollup.olap.CubeDataRepo;
 
 /**
  * Cube data repository that uses MongoDB for persistence.

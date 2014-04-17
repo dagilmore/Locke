@@ -1,7 +1,7 @@
-package com.rollup.olap.repositories.impl;
+package com.rollup.olap.impl;
 
 import com.rollup.olap.DataTree;
-import com.rollup.olap.repositories.WarehouseRepo;
+import com.rollup.olap.WarehouseRepo;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**

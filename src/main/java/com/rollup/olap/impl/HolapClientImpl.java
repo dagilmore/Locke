@@ -1,24 +1,24 @@
-package com.rollup.olap.services.impl;
+package com.rollup.olap.impl;
 
 import com.rollup.olap.DataTree;
 import com.rollup.olap.error.QueryDoesNotExistException;
-import com.rollup.olap.repositories.CacheManagerRepo;
-import com.rollup.olap.repositories.CubeDataRepo;
-import com.rollup.olap.repositories.WarehouseRepo;
-import com.rollup.olap.services.DataService;
+import com.rollup.olap.CacheManagerRepo;
+import com.rollup.olap.CubeDataRepo;
+import com.rollup.olap.WarehouseRepo;
+import com.rollup.olap.HolapClient;
 import org.apache.log4j.Logger;
 
 /**
  * @author David Gilmore
  * @date 4/13/14
  */
-public class DataServiceImpl implements DataService {
+public class HolapClientImpl implements HolapClient {
 
     private CacheManagerRepo cacheManager;
     private CubeDataRepo cubeRepo;
     private WarehouseRepo warehouseRepo;
 
-    private static final Logger logger = Logger.getLogger(DataServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(HolapClientImpl.class);
 
     /**
      *
