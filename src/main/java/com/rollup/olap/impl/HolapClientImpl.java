@@ -1,12 +1,14 @@
 package com.rollup.olap.impl;
 
-import com.rollup.olap.DataTree;
+import com.rollup.olap.*;
 import com.rollup.olap.error.QueryDoesNotExistException;
-import com.rollup.olap.CacheManagerRepo;
-import com.rollup.olap.CubeDataRepo;
-import com.rollup.olap.WarehouseRepo;
-import com.rollup.olap.HolapClient;
+import com.rollup.olap.models.DataNode;
 import org.apache.log4j.Logger;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author David Gilmore
@@ -29,9 +31,9 @@ public class HolapClientImpl implements HolapClient {
      * @throws QueryDoesNotExistException
      */
     @Override
-    public DataTree query(String resource, String view, String... conditions) throws QueryDoesNotExistException {
+    public DataNode query(String resource, String view, String... conditions) throws QueryDoesNotExistException {
 
-        DataTree ret;
+        DataNode ret;
         String query = cacheManager.getQuery(resource, view);
 
         if (cacheManager.getQueryExists(resource, view, conditions)) {
@@ -40,6 +42,31 @@ public class HolapClientImpl implements HolapClient {
 
         else {
             ret = warehouseRepo.query(query, conditions);
+        }
+
+        return ret;
+    }
+
+    /**
+     * "Rollup" a collection of data on a certain field.
+     * @param field
+     * @param list
+     * @return
+     */
+    @Override
+    public Map<Object, List<Map<String, Object>>> rollup(String field, List<Map<String, Object>> list) {
+
+        HashMap<Object, List<Map<String, Object>>> ret = new HashMap<>();
+
+        for (Map<String, Object> data: list) {
+            Object key = data.get(field);
+            if (ret.containsKey(key))
+                ret.get(key).add(data);
+            else {
+                List<Map<String, Object>> mapList = new LinkedList<>();
+                mapList.add(data);
+                ret.put(key, mapList);
+            }
         }
 
         return ret;

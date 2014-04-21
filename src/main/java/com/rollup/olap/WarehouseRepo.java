@@ -1,6 +1,6 @@
 package com.rollup.olap;
 
-import com.rollup.olap.DataTree;
+import com.rollup.olap.models.DataNode;
 
 /**
  * The WareHouseRepo interfaces with the data warehouse to make queries against the full data set.
@@ -9,5 +9,5 @@ import com.rollup.olap.DataTree;
  * @date 4/10/14
  */
 public interface WarehouseRepo {
-    public DataTree query(String query, String... conditions);
+    public DataNode query(String query, String... conditions);
 }

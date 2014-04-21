@@ -1,6 +1,6 @@
 package com.rollup.olap;
 
-import com.rollup.olap.DataTree;
+import com.rollup.olap.models.DataNode;
 
 /**
  * The CubeDataRepo interfaces with whatever data source is being used to handle persistence of data slices and cubes
@@ -9,5 +9,5 @@ import com.rollup.olap.DataTree;
  * @date 4/10/14
  */
 public interface CubeDataRepo {
-    public DataTree query(String resource, String view, String... where);
+    public DataNode query(String resource, String view, String... where);
 }

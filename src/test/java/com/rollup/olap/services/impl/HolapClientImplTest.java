@@ -1,10 +1,8 @@
 package com.rollup.olap.services.impl;
 
-import com.rollup.olap.DataTree;
-import com.rollup.olap.CacheManagerRepo;
-import com.rollup.olap.CubeDataRepo;
-import com.rollup.olap.WarehouseRepo;
-import com.rollup.olap.HolapClient;
+import com.rollup.olap.*;
+import com.rollup.olap.impl.HolapClientImpl;
+import com.rollup.olap.models.DataNode;
 import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +45,7 @@ public class HolapClientImplTest {
 
         expect(this.cacheManagerMock.getQuery("resource", "resource_view")).andReturn("SELECT ?, ?, ? FROM test.test_view");
         expect(this.cacheManagerMock.getQueryExists("resource", "resource_view", "cond1=cond2")).andReturn(true);
-        expect(this.cubeRepoMock.query("resource", "resource_view", "cond1=cond2")).andReturn(new DataTree(""));
+        expect(this.cubeRepoMock.query("resource", "resource_view", "cond1=cond2")).andReturn(new DataNode(""));
 
         this.control.replay();
 
@@ -61,7 +59,7 @@ public class HolapClientImplTest {
 
         expect(this.cacheManagerMock.getQuery("resource", "resource_view")).andReturn("SELECT ?, ?, ? FROM test.test_view");
         expect(this.cacheManagerMock.getQueryExists("resource", "resource_view", "cond1=cond2")).andReturn(false);
-        expect(this.warehouseRepoMock.query("SELECT ?, ?, ? FROM test.test_view", "cond1=cond2")).andReturn(new DataTree(""));
+        expect(this.warehouseRepoMock.query("SELECT ?, ?, ? FROM test.test_view", "cond1=cond2")).andReturn(new DataNode(""));
 
         this.control.replay();
 

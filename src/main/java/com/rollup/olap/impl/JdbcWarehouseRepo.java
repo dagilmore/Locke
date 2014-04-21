@@ -1,6 +1,6 @@
 package com.rollup.olap.impl;
 
-import com.rollup.olap.DataTree;
+import com.rollup.olap.models.DataNode;
 import com.rollup.olap.WarehouseRepo;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -15,8 +15,8 @@ public class JdbcWarehouseRepo implements WarehouseRepo {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public DataTree query(String query, String... conditions) {
-        return new DataTree("");
+    public DataNode query(String query, String... conditions) {
+        return new DataNode("");
     }
 
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {

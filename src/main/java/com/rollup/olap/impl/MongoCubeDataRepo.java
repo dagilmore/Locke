@@ -1,8 +1,8 @@
 package com.rollup.olap.impl;
 
 import com.google.code.morphia.Datastore;
-import com.rollup.olap.DataTree;
 import com.rollup.olap.CubeDataRepo;
+import com.rollup.olap.models.DataNode;
 
 /**
  * Cube data repository that uses MongoDB for persistence.
@@ -14,7 +14,7 @@ public class MongoCubeDataRepo implements CubeDataRepo {
     private Datastore mongoStore;
 
     @Override
-    public DataTree query(String resource, String view, String... where) {
+    public DataNode query(String resource, String view, String... where) {
         return null;
     }
 
