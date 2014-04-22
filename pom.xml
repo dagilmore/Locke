@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.rollup</groupId>
-    <artifactId>RollUp</artifactId>
+    <groupId>com.locke</groupId>
+    <artifactId>Locke</artifactId>
     <packaging>jar</packaging>
     <version>0.1</version>
-    <name>RollUp</name>
+    <name>Locke</name>
 
     <properties>
         <spring.version>4.0.3.RELEASE</spring.version>
@@ -325,7 +325,7 @@
         </pluginRepository>
     </pluginRepositories>
     <build>
-        <finalName>RollUp</finalName>
+        <finalName>Locke</finalName>
         <plugins>
 
             <plugin>
@@ -360,6 +360,22 @@
                 <artifactId>maven-scala-plugin</artifactId>
 
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.1.2</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 </project>
