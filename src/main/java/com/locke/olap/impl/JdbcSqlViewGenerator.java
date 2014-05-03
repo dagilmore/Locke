@@ -1,26 +1,16 @@
 package com.locke.olap.impl;
 
+import com.locke.olap.ViewGenerator;
 import com.locke.olap.models.JoinView;
 import com.locke.olap.models.SelectView;
 import com.locke.olap.models.TableView;
 import com.locke.olap.models.View;
-import com.locke.olap.ViewGenerator;
-
-import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * @author David Gilmore
  * @date 4/12/14
  */
 public class JdbcSqlViewGenerator implements ViewGenerator {
-
-    private Connection conn;
-
-    public JdbcSqlViewGenerator(Connection conn) throws SQLException {
-
-        this.conn = conn;
-    }
 
     @Override
     public String createQuery(View view) {

@@ -58,7 +58,7 @@
         <dependency>
             <groupId>asm</groupId>
             <artifactId>asm-all</artifactId>
-            <version>2.1</version>
+            <version>3.1</version>
         </dependency>
 
         <dependency>
@@ -177,32 +177,6 @@
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-parsers</artifactId>
             <version>1.4</version>
-        </dependency>
-
-
-        <!-- Scala Dependencies -->
-
-        <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-library</artifactId>
-            <version>2.10.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml</groupId>
-            <artifactId>jackson-module-scala</artifactId>
-            <version>1.9.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.scalanlp</groupId>
-            <artifactId>breeze_2.10</artifactId>
-            <version>0.5.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.scalanlp</groupId>
-            <artifactId>breeze-viz_2.10</artifactId>
-            <version>0.5.2</version>
         </dependency>
 
         <!-- DDR dependencies -->
@@ -374,6 +348,19 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.16</version>
+                <configuration>
+                    <parallel>methods</parallel>
+                    <threadCount>10</threadCount>
+                    <includes>
+                        <include>**/*Test.*</include>
+                    </includes>
+                </configuration>
             </plugin>
 
         </plugins>
