@@ -1,12 +1,16 @@
-package com.locke.olap.services.impl;
+package com.locke.olap.impl;
 
-import com.locke.olap.*;
-import com.locke.olap.impl.HolapClientImpl;
+import com.locke.olap.CacheManagerRepo;
+import com.locke.olap.CubeDataRepo;
+import com.locke.olap.HolapClient;
+import com.locke.olap.WarehouseRepo;
+import com.locke.olap.error.QueryDoesNotExistException;
 import com.locke.olap.models.DataNode;
 import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createStrictControl;
 import static org.easymock.EasyMock.expect;
 
@@ -43,13 +47,14 @@ public class HolapClientImplTest {
     @Test
     public void testQuery__Cached() throws Exception {
 
+        Condition cond = new Condition("left", "right", ">");
         expect(this.cacheManagerMock.getQuery("resource", "resource_view")).andReturn("SELECT ?, ?, ? FROM test.test_view");
-        expect(this.cacheManagerMock.getQueryExists("resource", "resource_view", "cond1=cond2")).andReturn(true);
-        expect(this.cubeRepoMock.query("resource", "resource_view", "cond1=cond2")).andReturn(new DataNode(""));
+        expect(this.cacheManagerMock.getQueryExists("resource", "resource_view", cond)).andReturn(true);
+        expect(this.cubeRepoMock.query(anyObject(String.class), anyObject(String.class), anyObject(Condition[].class))).andReturn(new DataNode(""));
 
         this.control.replay();
 
-        this.holapClient.query("resource", "resource_view", "cond1=cond2");
+        this.holapClient.query("resource", "resource_view", cond);
 
         this.control.verify();
     }
@@ -57,13 +62,27 @@ public class HolapClientImplTest {
     @Test
     public void testQuery__NotCached() throws Exception {
 
+        Condition cond = new Condition("left", "right", ">");
         expect(this.cacheManagerMock.getQuery("resource", "resource_view")).andReturn("SELECT ?, ?, ? FROM test.test_view");
-        expect(this.cacheManagerMock.getQueryExists("resource", "resource_view", "cond1=cond2")).andReturn(false);
-        expect(this.warehouseRepoMock.query("SELECT ?, ?, ? FROM test.test_view", "cond1=cond2")).andReturn(new DataNode(""));
+        expect(this.cacheManagerMock.getQueryExists("resource", "resource_view", cond)).andReturn(false);
+        expect(this.warehouseRepoMock.query("SELECT ?, ?, ? FROM test.test_view", cond)).andReturn(new DataNode(""));
 
         this.control.replay();
 
-        this.holapClient.query("resource", "resource_view", "cond1=cond2");
+        this.holapClient.query("resource", "resource_view", cond);
+
+        this.control.verify();
+    }
+
+    @Test
+    public void testQuery__QueryDoesNotExist() throws Exception {
+
+        Condition cond = new Condition("left", "right", ">");
+        expect(this.cacheManagerMock.getQuery("resource", "resource_view")).andThrow(new QueryDoesNotExistException());
+
+        this.control.replay();
+
+        this.holapClient.query("resource", "resource_view", cond);
 
         this.control.verify();
     }

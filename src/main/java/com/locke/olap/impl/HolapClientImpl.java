@@ -31,7 +31,7 @@ public class HolapClientImpl implements HolapClient {
      * @throws QueryDoesNotExistException
      */
     @Override
-    public DataNode query(String resource, String view, String... conditions) throws QueryDoesNotExistException {
+    public DataNode query(String resource, String view, Condition... conditions) throws QueryDoesNotExistException {
 
         DataNode ret;
         String query = cacheManager.getQuery(resource, view);

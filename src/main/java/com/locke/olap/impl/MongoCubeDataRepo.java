@@ -1,8 +1,8 @@
 package com.locke.olap.impl;
 
-import com.mongodb.*;
 import com.locke.olap.CubeDataRepo;
 import com.locke.olap.models.DataNode;
+import com.mongodb.*;
 
 import java.util.Iterator;
 import java.util.List;
@@ -18,15 +18,17 @@ public class MongoCubeDataRepo implements CubeDataRepo {
     private DB mongoDb;
 
     @Override
-    public DataNode query(String resource, String view, String... where) {
+    public DataNode query(String resource, String view, Condition... conditions) {
 
-        BasicDBList list = new BasicDBList();
+        DBCollection coll = mongoDb.getCollection(resource);
+
+
 
         return null;
     }
 
     @Override
-    public void save(String resourceName, List<Map<String, Object>> list) {
+    public void save(String resourceName, String view, List<Map<String, Object>> list) {
 
         DBObject[] objectArray = new DBObject[list.size()];
 

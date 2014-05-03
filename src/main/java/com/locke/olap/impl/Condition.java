@@ -10,6 +10,12 @@ public class Condition {
     private String right;
     private String operator;
 
+    public Condition(String left, String right, String operator) {
+        this.left = left;
+        this.right = right;
+        this.operator = operator;
+    }
+
     public String getLeft() {
         return left;
     }

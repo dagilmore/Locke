@@ -1,5 +1,6 @@
 package com.locke.olap;
 
+import com.locke.olap.impl.Condition;
 import com.locke.olap.models.DataNode;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.Map;
  * @date 4/10/14
  */
 public interface CubeDataRepo {
-    public DataNode query(String resource, String view, String... where);
+    public DataNode query(String resource, String view, Condition... condition);
 
-    void save(String resourceName, List<Map<String, Object>> list);
+    void save(String resourceName, String view, List<Map<String, Object>> list);
 }

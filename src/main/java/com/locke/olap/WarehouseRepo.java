@@ -1,5 +1,6 @@
 package com.locke.olap;
 
+import com.locke.olap.impl.Condition;
 import com.locke.olap.models.DataNode;
 
 /**
@@ -9,5 +10,5 @@ import com.locke.olap.models.DataNode;
  * @date 4/10/14
  */
 public interface WarehouseRepo {
-    public DataNode query(String query, String... conditions);
+    public DataNode query(String query, Condition... conditions);
 }

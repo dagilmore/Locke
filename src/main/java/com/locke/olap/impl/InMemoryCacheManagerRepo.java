@@ -35,10 +35,10 @@ public class InMemoryCacheManagerRepo implements CacheManagerRepo {
     }
 
     @Override
-    public boolean getQueryExists(String resource, String view, String... where) {
+    public boolean getQueryExists(String resource, String view, Condition... conditions) {
         return false;
     }
 
     @Override
-    public void setQueryExists(String resource, String view, String... where) {}
+    public void setQueryExists(String resource, String view, Condition... conditions) {}
 }

@@ -15,7 +15,7 @@ public class JdbcWarehouseRepo implements WarehouseRepo {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public DataNode query(String query, String... conditions) {
+    public DataNode query(String query, Condition... conditions) {
         return new DataNode("");
     }
 

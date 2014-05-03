@@ -1,6 +1,7 @@
 package com.locke.olap;
 
 import com.locke.olap.error.QueryDoesNotExistException;
+import com.locke.olap.impl.Condition;
 
 import java.util.HashMap;
 
@@ -37,17 +38,17 @@ public interface CacheManagerRepo {
      *
      * @param resource
      * @param view
-     * @param where
+     * @param conditions
      * @return
      */
-    boolean getQueryExists(String resource, String view, String... where);
+    boolean getQueryExists(String resource, String view, Condition... conditions);
 
     /**
      *
      * @param resource
      * @param view
-     * @param where
+     * @param conditions
      */
-    void setQueryExists(String resource, String view, String... where);
+    void setQueryExists(String resource, String view, Condition... conditions);
 
 }
