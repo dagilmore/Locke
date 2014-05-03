@@ -2,6 +2,7 @@ package com.locke.olap;
 
 import com.locke.olap.error.QueryDoesNotExistException;
 import com.locke.olap.impl.Condition;
+import com.locke.olap.models.View;
 
 import java.util.HashMap;
 
@@ -16,7 +17,7 @@ public interface CacheManagerRepo {
      * @param resource
      * @return
      */
-    HashMap<String, String> getResource(String resource);
+    HashMap<String, View> getResource(String resource);
 
 
     /**
@@ -32,7 +33,7 @@ public interface CacheManagerRepo {
      * @param view
      * @return
      */
-    String getQuery(String resource, String view) throws QueryDoesNotExistException;
+    View getQuery(String resource, String view) throws QueryDoesNotExistException;
 
     /**
      *

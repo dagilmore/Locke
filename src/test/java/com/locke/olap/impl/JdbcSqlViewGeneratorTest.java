@@ -1,6 +1,7 @@
 package com.locke.olap.impl;
 
 
+import com.locke.olap.models.TableView;
 import org.junit.Before;
 import org.junit.Test;
 

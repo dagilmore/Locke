@@ -1,6 +1,7 @@
 package com.locke.olap.impl;
 
 import com.locke.olap.CacheManagerRepo;
+import com.locke.olap.models.View;
 
 import java.util.HashMap;
 
@@ -10,7 +11,7 @@ import java.util.HashMap;
  */
 public class InMemoryCacheManagerRepo implements CacheManagerRepo {
 
-    private HashMap<String, HashMap<String, String>> domains;
+    private HashMap<String, HashMap<String, View>> domains;
     private HashMap<String, String> cubes;
 
 
@@ -20,17 +21,17 @@ public class InMemoryCacheManagerRepo implements CacheManagerRepo {
     }
 
     @Override
-    public HashMap<String, String> getResource(String resource) {
+    public HashMap<String, View> getResource(String resource) {
         return this.domains.get(resource);
     }
 
     @Override
     public void createResource(String resource) {
-        domains.put(resource, new HashMap<String, String>());
+        domains.put(resource, new HashMap<String, View>());
     }
 
     @Override
-    public String getQuery(String resource, String view) {
+    public View getQuery(String resource, String view) {
         return domains.get(resource).get(view);
     }
 

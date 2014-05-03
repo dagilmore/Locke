@@ -6,13 +6,12 @@ import com.locke.olap.HolapClient;
 import com.locke.olap.WarehouseRepo;
 import com.locke.olap.error.QueryDoesNotExistException;
 import com.locke.olap.models.DataNode;
+import com.locke.olap.models.SelectView;
 import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.easymock.EasyMock.anyObject;
-import static org.easymock.EasyMock.createStrictControl;
-import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.*;
 
 /**
  * @author David Gilmore
@@ -48,7 +47,7 @@ public class HolapClientImplTest {
     public void testQuery__Cached() throws Exception {
 
         Condition cond = new Condition("left", "right", ">");
-        expect(this.cacheManagerMock.getQuery("resource", "resource_view")).andReturn("SELECT ?, ?, ? FROM test.test_view");
+        expect(this.cacheManagerMock.getQuery("resource", "resource_view")).andReturn(new SelectView());
         expect(this.cacheManagerMock.getQueryExists("resource", "resource_view", cond)).andReturn(true);
         expect(this.cubeRepoMock.query(anyObject(String.class), anyObject(String.class), anyObject(Condition[].class))).andReturn(new DataNode(""));
 
@@ -63,9 +62,10 @@ public class HolapClientImplTest {
     public void testQuery__NotCached() throws Exception {
 
         Condition cond = new Condition("left", "right", ">");
-        expect(this.cacheManagerMock.getQuery("resource", "resource_view")).andReturn("SELECT ?, ?, ? FROM test.test_view");
+        SelectView view = new SelectView();
+        expect(this.cacheManagerMock.getQuery("resource", "resource_view")).andReturn(view);
         expect(this.cacheManagerMock.getQueryExists("resource", "resource_view", cond)).andReturn(false);
-        expect(this.warehouseRepoMock.query("SELECT ?, ?, ? FROM test.test_view", cond)).andReturn(new DataNode(""));
+        expect(this.warehouseRepoMock.query("resource", view, cond)).andReturn(new DataNode(""));
 
         this.control.replay();
 
@@ -74,7 +74,7 @@ public class HolapClientImplTest {
         this.control.verify();
     }
 
-    @Test
+    @Test(expected = QueryDoesNotExistException.class)
     public void testQuery__QueryDoesNotExist() throws Exception {
 
         Condition cond = new Condition("left", "right", ">");
@@ -83,7 +83,5 @@ public class HolapClientImplTest {
         this.control.replay();
 
         this.holapClient.query("resource", "resource_view", cond);
-
-        this.control.verify();
     }
 }

@@ -1,6 +1,6 @@
-package com.locke.olap.impl;
+package com.locke.olap.models;
 
-import com.locke.olap.View;
+import com.locke.olap.impl.Condition;
 
 import java.util.List;
 import java.util.Map;
@@ -9,44 +9,13 @@ import java.util.Map;
  * @author David Gilmore
  * @date 4/18/14
  */
-public class SelectView implements View {
-
-    private String id;
-
-    private String resourceName;
-
-    private List<String> columns;
-    private List<String> groupBy;
+public class SelectView extends View {
 
     private View from;
-
+    private List<String> groupBy;
     private Map<String, String> functions;
-
     private List<Condition> whereConditions;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getResourceName() {
-        return resourceName;
-    }
-
-    public void setResourceName(String resourceName) {
-        this.resourceName = resourceName;
-    }
-
-    public List<String> getColumns() {
-        return columns;
-    }
-
-    public void setColumns(List<String> columns) {
-        this.columns = columns;
-    }
 
     public List<String> getGroupBy() {
         return groupBy;

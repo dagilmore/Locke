@@ -3,6 +3,7 @@ package com.locke.olap.impl;
 import com.locke.olap.*;
 import com.locke.olap.error.QueryDoesNotExistException;
 import com.locke.olap.models.DataNode;
+import com.locke.olap.models.View;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
@@ -25,23 +26,23 @@ public class HolapClientImpl implements HolapClient {
     /**
      *
      * @param resource
-     * @param view
+     * @param viewName
      * @param conditions
      * @return
      * @throws QueryDoesNotExistException
      */
     @Override
-    public DataNode query(String resource, String view, Condition... conditions) throws QueryDoesNotExistException {
+    public DataNode query(String resource, String viewName, Condition... conditions) throws QueryDoesNotExistException {
 
         DataNode ret;
-        String query = cacheManager.getQuery(resource, view);
+        View view = cacheManager.getQuery(resource, viewName);
 
-        if (cacheManager.getQueryExists(resource, view, conditions)) {
-            ret = cubeRepo.query(resource, view, conditions);
+        if (cacheManager.getQueryExists(resource, viewName, conditions)) {
+            ret = cubeRepo.query(resource, viewName, conditions);
         }
 
         else {
-            ret = warehouseRepo.query(query, conditions);
+            ret = warehouseRepo.query(resource, view, conditions);
         }
 
         return ret;

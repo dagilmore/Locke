@@ -1,6 +1,6 @@
-package com.locke.olap.impl;
+package com.locke.olap.models;
 
-import com.locke.olap.View;
+import com.locke.olap.impl.Condition;
 
 import java.util.List;
 
@@ -8,41 +8,13 @@ import java.util.List;
  * @author David Gilmore
  * @date 4/18/14
  */
-public class JoinView implements View {
-
-    private String id;
-    private String resourceName;
-
-    private List<String> columns;
+public class JoinView extends View {
 
     private View left;
     private View right;
     private List<Condition> joinConditions;
     private List<Condition> whereConditions;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getResourceName() {
-        return resourceName;
-    }
-
-    public void setResourceName(String resourceName) {
-        this.resourceName = resourceName;
-    }
-
-    public List<String> getColumns() {
-        return columns;
-    }
-
-    public void setColumns(List<String> columns) {
-        this.columns = columns;
-    }
 
     public View getLeft() {
         return left;

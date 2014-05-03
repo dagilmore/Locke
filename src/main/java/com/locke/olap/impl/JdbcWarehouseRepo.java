@@ -1,7 +1,8 @@
 package com.locke.olap.impl;
 
-import com.locke.olap.models.DataNode;
 import com.locke.olap.WarehouseRepo;
+import com.locke.olap.models.DataNode;
+import com.locke.olap.models.View;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
@@ -15,7 +16,7 @@ public class JdbcWarehouseRepo implements WarehouseRepo {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public DataNode query(String query, Condition... conditions) {
+    public DataNode query(String resource, View view, Condition... conditions) {
         return new DataNode("");
     }
 

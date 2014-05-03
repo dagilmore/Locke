@@ -1,6 +1,9 @@
 package com.locke.olap.impl;
 
-import com.locke.olap.View;
+import com.locke.olap.models.JoinView;
+import com.locke.olap.models.SelectView;
+import com.locke.olap.models.TableView;
+import com.locke.olap.models.View;
 import com.locke.olap.ViewGenerator;
 
 import java.sql.Connection;
