@@ -252,7 +252,7 @@
             <artifactId>sqlbuilder</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${basedir}/../sqlbuilder/target/sqlbuilder-1.0-SNAPSHOT.jar</systemPath>
+            <systemPath>${basedir}/lib/sqlbuilder-1.0-SNAPSHOT.jar</systemPath>
         </dependency>
 
         <dependency>
