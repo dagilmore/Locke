@@ -18,13 +18,16 @@ public class MongoCubeDataRepo implements CubeDataRepo {
     private DB mongoDb;
 
     @Override
+    @SuppressWarnings("unchecked")
     public DataNode query(String resource, String view, Condition... conditions) {
 
         DBCollection coll = mongoDb.getCollection(resource);
 
+        BasicDBObject baseQuery = new BasicDBObject("view", view);
 
+        DBCursor cur = coll.find(baseQuery);
 
-        return null;
+        return new DataNode(cur.toArray());
     }
 
     @Override

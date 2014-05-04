@@ -20,3 +20,4 @@ metastore_db/
 TempStatsStore/
 derby.log
 ?/
+test.h2.db
