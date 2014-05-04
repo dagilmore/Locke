@@ -12,17 +12,16 @@ import java.util.Map;
 public class SelectView extends View {
 
     private View from;
-    private List<String> groupBy;
+    private List<String> group;
     private Map<String, String> functions;
-    private List<Condition> whereConditions;
+    private List<Condition> where;
 
-
-    public List<String> getGroupBy() {
-        return groupBy;
+    public List<String> getGroup() {
+        return group;
     }
 
-    public void setGroupBy(List<String> groupBy) {
-        this.groupBy = groupBy;
+    public void setGroup(List<String> group) {
+        this.group = group;
     }
 
     public View getFrom() {
@@ -41,11 +40,11 @@ public class SelectView extends View {
         this.functions = functions;
     }
 
-    public List<Condition> getWhereConditions() {
-        return whereConditions;
+    public List<Condition> getWhere() {
+        return where;
     }
 
-    public void setWhereConditions(List<Condition> whereConditions) {
-        this.whereConditions = whereConditions;
+    public void setWhere(List<Condition> where) {
+        this.where = where;
     }
 }

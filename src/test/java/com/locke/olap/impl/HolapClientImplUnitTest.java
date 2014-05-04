@@ -17,7 +17,7 @@ import static org.easymock.EasyMock.*;
  * @author David Gilmore
  * @date 4/13/14
  */
-public class HolapClientImplTest {
+public class HolapClientImplUnitTest {
 
     private IMocksControl control;
     private CacheManagerRepo cacheManagerMock;
@@ -46,7 +46,7 @@ public class HolapClientImplTest {
     @Test
     public void testQuery__Cached() throws Exception {
 
-        Condition cond = new Condition("left", "right", ">");
+        Condition cond = new Condition("resource_view", "left", "right", ">");
         expect(this.cacheManagerMock.getQuery("resource", "resource_view")).andReturn(new SelectView());
         expect(this.cacheManagerMock.getQueryExists("resource", "resource_view", cond)).andReturn(true);
         expect(this.cubeRepoMock.query(anyObject(String.class), anyObject(String.class), anyObject(Condition[].class))).andReturn(new DataNode(""));
@@ -61,7 +61,7 @@ public class HolapClientImplTest {
     @Test
     public void testQuery__NotCached() throws Exception {
 
-        Condition cond = new Condition("left", "right", ">");
+        Condition cond = new Condition("resource_view", "left", "right", ">");
         SelectView view = new SelectView();
         expect(this.cacheManagerMock.getQuery("resource", "resource_view")).andReturn(view);
         expect(this.cacheManagerMock.getQueryExists("resource", "resource_view", cond)).andReturn(false);
@@ -77,7 +77,7 @@ public class HolapClientImplTest {
     @Test(expected = QueryDoesNotExistException.class)
     public void testQuery__QueryDoesNotExist() throws Exception {
 
-        Condition cond = new Condition("left", "right", ">");
+        Condition cond = new Condition("resource_view", "left", "right", ">");
         expect(this.cacheManagerMock.getQuery("resource", "resource_view")).andThrow(new QueryDoesNotExistException());
 
         this.control.replay();
