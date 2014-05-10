@@ -6,10 +6,10 @@ package com.locke.olap.error;
  * @author David Gilmore
  * @date 4/14/14
  */
-public class QueryDoesNotExistException extends Exception {
-    public QueryDoesNotExistException() {}
+public class DoesNotExistException extends Exception {
+    public DoesNotExistException() {}
 
-    public QueryDoesNotExistException(String message) {
+    public DoesNotExistException(String message) {
         super(message);
     }
 }

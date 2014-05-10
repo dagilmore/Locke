@@ -1,6 +1,7 @@
 package com.locke.olap.impl;
 
 import com.locke.olap.WarehouseRepo;
+import com.locke.olap.models.Condition;
 import com.locke.olap.models.DataNode;
 import com.locke.olap.models.SelectView;
 import com.locke.olap.models.TableView;
