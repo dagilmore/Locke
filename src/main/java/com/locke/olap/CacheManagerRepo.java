@@ -5,7 +5,7 @@ import com.locke.olap.error.ExistsException;
 import com.locke.olap.models.Condition;
 import com.locke.olap.models.View;
 
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author David Gilmore
@@ -18,7 +18,7 @@ public interface CacheManagerRepo {
      * @param resource
      * @return
      */
-    HashMap<String, View> getResource(String resource);
+    Map<String, View> getResource(String resource);
 
 
     /**

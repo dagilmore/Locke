@@ -14,8 +14,8 @@ import java.util.*;
  */
 public class InMemoryCacheManagerRepo implements CacheManagerRepo {
 
-    private HashMap<String, HashMap<String, View>> resourceViews;
-    private HashMap<String, HashMap<String, Set<Condition>>> queryHistory;
+    private Map<String, Map<String, View>> resourceViews;
+    private Map<String, Map<String, Map<String, Condition>>> queryHistory;
 
 
     public InMemoryCacheManagerRepo() {
@@ -24,7 +24,7 @@ public class InMemoryCacheManagerRepo implements CacheManagerRepo {
     }
 
     @Override
-    public HashMap<String, View> getResource(String resource) {
+    public Map<String, View> getResource(String resource) {
         return this.resourceViews.get(resource);
     }
 
@@ -34,7 +34,7 @@ public class InMemoryCacheManagerRepo implements CacheManagerRepo {
         if (this.queryHistory.containsKey(resource) || this.resourceViews.containsKey(resource))
             throw new ExistsException(resource + " already exists");
 
-        queryHistory.put(resource, new HashMap<String, Set<Condition>>());
+        queryHistory.put(resource, new HashMap<String, Map<String, Condition>>());
         resourceViews.put(resource, new HashMap<String, View>());
     }
 
@@ -51,7 +51,7 @@ public class InMemoryCacheManagerRepo implements CacheManagerRepo {
             if (this.queryHistory.get(resource).containsKey(view) || this.resourceViews.get(resource).containsKey(view))
                 throw new ExistsException(view + " already exists");
 
-            this.queryHistory.get(resource).put(view.getName(), new HashSet<Condition>());
+            this.queryHistory.get(resource).put(view.getName(), new HashMap<String, Condition>());
         }
         else {
             createResource(resource);
@@ -64,13 +64,18 @@ public class InMemoryCacheManagerRepo implements CacheManagerRepo {
         return getQueryExists(queryHistory.get(resource).get(view), conditions);
     }
 
-    private boolean getQueryExists(Set<Condition> existing, Condition[] current) {
+    private boolean getQueryExists(Map<String, Condition> existing, Condition[] current) {
 
         boolean ret = false;
         for (Condition curr: current)
-            if (!existing.contains(curr))
+            if (!conditionIsContained(existing, curr))
                 for (Condition exists: existing) if (conditionIsContained(exists, curr)) ret = true;
         return ret;
+    }
+
+    @SuppressWarnings("unchecked")
+    private boolean conditionIsContained(Map<String, Condition> conditionMap, Condition current) {
+        return false;
     }
 
     @SuppressWarnings("unchecked")
