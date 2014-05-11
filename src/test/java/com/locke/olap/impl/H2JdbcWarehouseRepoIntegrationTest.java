@@ -1,18 +1,19 @@
 package com.locke.olap.impl;
 
+import com.locke.IntegrationTestCase;
 import com.locke.olap.WarehouseRepo;
 import com.locke.olap.models.DataNode;
 import com.locke.olap.models.SelectView;
 import com.locke.olap.models.TableView;
-import org.h2.jdbcx.JdbcDataSource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.sql.Connection;
 import java.sql.Statement;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static junit.framework.Assert.assertNotNull;
 
@@ -20,21 +21,12 @@ import static junit.framework.Assert.assertNotNull;
  * @author David Gilmore
  * @date 5/3/14
  */
-public class H2JdbcWarehouseRepoIntegrationTest {
+public class H2JdbcWarehouseRepoIntegrationTest extends IntegrationTestCase {
 
-    private Connection conn;
     private WarehouseRepo warehouseRepo;
 
     @Before
     public void setUp() throws Exception {
-
-        JdbcDataSource ds = new JdbcDataSource();
-
-        ds.setURL("jdbc:h2:test");
-        ds.setUser("sa");
-        ds.setPassword("sa");
-
-        this.conn = ds.getConnection();
 
         Statement stat = conn.createStatement();
 
@@ -55,8 +47,6 @@ public class H2JdbcWarehouseRepoIntegrationTest {
 
         stat.close();
 
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(ds);
-
         JdbcWarehouseRepo jdbcWarehouseRepo = new JdbcWarehouseRepo();
 
         jdbcWarehouseRepo.setJdbcTemplate(jdbcTemplate);
@@ -70,8 +60,6 @@ public class H2JdbcWarehouseRepoIntegrationTest {
         Statement stat = conn.createStatement();
 
         stat.execute("drop table test_table");
-
-        this.conn.close();
     }
 
     @Test

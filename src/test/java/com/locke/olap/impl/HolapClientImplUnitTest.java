@@ -44,6 +44,22 @@ public class HolapClientImplUnitTest {
     }
 
     @Test
+    public void testCreateResource() throws Exception {
+
+    }
+
+    @Test
+    public void testCreateResource__WithDefaultView() throws Exception {
+
+    }
+
+    @Test
+    public void testCreateView() throws Exception {
+
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
     public void testQuery__Cached() throws Exception {
 
         Condition cond = new Condition("resource_view", "left", "right", ">");
@@ -59,13 +75,22 @@ public class HolapClientImplUnitTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testQuery__NotCached() throws Exception {
 
         Condition cond = new Condition("resource_view", "left", "right", ">");
+
         SelectView view = new SelectView();
+
+        DataNode ret = new DataNode("");
+
         expect(this.cacheManagerMock.getQuery("resource", "resource_view")).andReturn(view);
         expect(this.cacheManagerMock.getQueryExists("resource", "resource_view", cond)).andReturn(false);
-        expect(this.warehouseRepoMock.query("resource", view, cond)).andReturn(new DataNode(""));
+        expect(this.warehouseRepoMock.query("resource", view, cond)).andReturn(ret);
+
+        this.cubeRepoMock.save("resource", "resource_view", ret);
+
+        this.cacheManagerMock.setQueryExists("resource", "resource_view", cond);
 
         this.control.replay();
 

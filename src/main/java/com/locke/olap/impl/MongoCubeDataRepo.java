@@ -4,8 +4,8 @@ import com.locke.olap.CubeDataRepo;
 import com.locke.olap.models.DataNode;
 import com.mongodb.*;
 
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,27 +31,44 @@ public class MongoCubeDataRepo implements CubeDataRepo {
     }
 
     @Override
-    public void save(String resourceName, String view, List<Map<String, Object>> list) {
+    @SuppressWarnings("unchecked")
+    public void save(String resourceName, String view, DataNode data) {
 
-        DBObject[] objectArray = new DBObject[list.size()];
+        if (data == null || data.getData() == null) return;
 
-        int i = 0;
-        for (Map<String, Object> map: list) {
+        if (data.getData() instanceof Collection<?>) {
 
-            DBObject obj = new BasicDBObject(map.size());
-            Iterator it = map.entrySet().iterator();
+            Collection coll = (Collection) data.getData();
 
-            while (it.hasNext()) {
-                Map.Entry entry = (Map.Entry) it.next();
-                obj.put((String) entry.getKey(), entry.getValue());
+            DBObject[] objectArray = new DBObject[coll.size()];
+
+            int i = 0;
+            for (Object item: coll) {
+
+                if (item instanceof Map) {
+
+                    Map<Object, Object> map = (Map) item;
+
+                    DBObject obj = new BasicDBObject();
+                    Iterator it = map.entrySet().iterator();
+
+                    while (it.hasNext()) {
+                        Map.Entry entry = (Map.Entry) it.next();
+                        obj.put((String) entry.getKey(), entry.getValue());
+                    }
+
+                    objectArray[i++] = obj;
+                }
             }
 
-            objectArray[i++] = obj;
+            DBCollection mongoColl = mongoDb.getCollection(resourceName);
+
+            mongoColl.insert(objectArray, WriteConcern.SAFE);
         }
 
-        DBCollection coll = mongoDb.getCollection(resourceName);
+        else {
 
-        coll.insert(objectArray, WriteConcern.SAFE);
+        }
     }
 
     public void setMongoDb(DB mongoDb) {

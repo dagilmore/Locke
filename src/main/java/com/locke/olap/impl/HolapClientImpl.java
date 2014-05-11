@@ -26,6 +26,35 @@ public class HolapClientImpl implements HolapClient {
     /**
      *
      * @param resource
+     */
+    @Override
+    public void createResource(String resource) {
+
+    }
+
+    /**
+     *
+     * @param resource
+     * @param defaultView
+     */
+    @Override
+    public void createResource(String resource, View defaultView) {
+
+    }
+
+    /**
+     *
+     * @param resource
+     * @param view
+     */
+    @Override
+    public void createView(String resource, String view) {
+
+    }
+
+    /**
+     *
+     * @param resource
      * @param viewName
      * @param conditions
      * @return
@@ -35,6 +64,7 @@ public class HolapClientImpl implements HolapClient {
     public DataNode query(String resource, String viewName, Condition... conditions) throws QueryDoesNotExistException {
 
         DataNode ret;
+
         View view = cacheManager.getQuery(resource, viewName);
 
         if (cacheManager.getQueryExists(resource, viewName, conditions)) {
@@ -43,6 +73,8 @@ public class HolapClientImpl implements HolapClient {
 
         else {
             ret = warehouseRepo.query(resource, view, conditions);
+            cubeRepo.save(resource, viewName, ret);
+            cacheManager.setQueryExists(resource, viewName, conditions);
         }
 
         return ret;
