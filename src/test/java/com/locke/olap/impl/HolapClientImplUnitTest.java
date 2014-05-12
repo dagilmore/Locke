@@ -5,9 +5,7 @@ import com.locke.olap.CubeDataRepo;
 import com.locke.olap.HolapClient;
 import com.locke.olap.WarehouseRepo;
 import com.locke.olap.error.DoesNotExistException;
-import com.locke.olap.models.Condition;
-import com.locke.olap.models.DataNode;
-import com.locke.olap.models.SelectView;
+import com.locke.olap.models.*;
 import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,28 +33,42 @@ public class HolapClientImplUnitTest {
         this.cubeRepoMock = this.control.createMock(CubeDataRepo.class);
         this.warehouseRepoMock = this.control.createMock(WarehouseRepo.class);
 
-        HolapClientImpl dataServiceImpl = new HolapClientImpl();
+        HolapClientImpl holapClientImpl = new HolapClientImpl();
 
-        dataServiceImpl.setCacheManager(this.cacheManagerMock);
-        dataServiceImpl.setCubeRepo(this.cubeRepoMock);
-        dataServiceImpl.setWarehouseRepo(this.warehouseRepoMock);
+        holapClientImpl.setCacheManager(this.cacheManagerMock);
+        holapClientImpl.setCubeRepo(this.cubeRepoMock);
+        holapClientImpl.setWarehouseRepo(this.warehouseRepoMock);
 
-        this.holapClient = dataServiceImpl;
+        this.holapClient = holapClientImpl;
     }
 
     @Test
     public void testCreateResource() throws Exception {
 
-    }
+        this.cacheManagerMock.createResource("resource");
 
-    @Test
-    public void testCreateResource__WithDefaultView() throws Exception {
+        this.control.replay();
 
+        this.holapClient.createResource("resource");
+
+        this.control.verify();
     }
 
     @Test
     public void testCreateView() throws Exception {
 
+        View view = new TableView();
+
+        expect(this.cacheManagerMock.getResource("resource")).andReturn(null);
+
+        this.cacheManagerMock.createResource("resource");
+        this.cacheManagerMock.createView("resource", view);
+
+        this.control.replay();
+
+        this.holapClient.createView("resource", view);
+
+        this.control.verify();
     }
 
     @Test
@@ -101,6 +113,7 @@ public class HolapClientImplUnitTest {
     }
 
     @Test(expected = DoesNotExistException.class)
+    @SuppressWarnings("unchecked")
     public void testQuery__QueryDoesNotExist() throws Exception {
 
         Condition cond = new Condition("resource_view", "left", "right", ">");

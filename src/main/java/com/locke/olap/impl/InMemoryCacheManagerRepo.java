@@ -74,11 +74,6 @@ public class InMemoryCacheManagerRepo implements CacheManagerRepo {
     }
 
     @SuppressWarnings("unchecked")
-    private boolean conditionIsContained(Set<Condition> conditionMap, Condition current) {
-        return false;
-    }
-
-    @SuppressWarnings("unchecked")
     private boolean conditionIsContained(Condition exists, Condition current) {
 
         if (isCompoundCondition(exists) || isCompoundCondition(current))
