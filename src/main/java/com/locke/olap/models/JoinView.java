@@ -1,7 +1,5 @@
 package com.locke.olap.models;
 
-import com.locke.olap.impl.Condition;
-
 import java.util.List;
 
 /**

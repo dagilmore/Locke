@@ -1,7 +1,7 @@
 package com.locke.olap;
 
-import com.locke.olap.error.QueryDoesNotExistException;
-import com.locke.olap.impl.Condition;
+import com.locke.olap.error.DoesNotExistException;
+import com.locke.olap.models.Condition;
 import com.locke.olap.models.DataNode;
 import com.locke.olap.models.View;
 
@@ -20,7 +20,7 @@ public interface HolapClient {
 
     void createView(String resource, String view);
 
-    DataNode query(String resource, String view, Condition... conditions) throws QueryDoesNotExistException;
+    DataNode query(String resource, String view, Condition... conditions) throws DoesNotExistException;
 
     Map<Object, List<Map<String, Object>>> rollup(String field, List<Map<String, Object>> list);
 }

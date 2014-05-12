@@ -1,6 +1,6 @@
 package com.locke.olap;
 
-import com.locke.olap.impl.Condition;
+import com.locke.olap.models.Condition;
 import com.locke.olap.models.DataNode;
 
 /**
