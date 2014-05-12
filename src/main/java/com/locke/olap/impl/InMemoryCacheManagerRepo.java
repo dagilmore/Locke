@@ -15,7 +15,7 @@ import java.util.*;
 public class InMemoryCacheManagerRepo implements CacheManagerRepo {
 
     private Map<String, Map<String, View>> resourceViews;
-    private Map<String, Map<String, Map<String, Condition>>> queryHistory;
+    private Map<String, Map<String, Set<Condition>>> queryHistory;
 
 
     public InMemoryCacheManagerRepo() {
@@ -34,7 +34,7 @@ public class InMemoryCacheManagerRepo implements CacheManagerRepo {
         if (this.queryHistory.containsKey(resource) || this.resourceViews.containsKey(resource))
             throw new ExistsException(resource + " already exists");
 
-        queryHistory.put(resource, new HashMap<String, Map<String, Condition>>());
+        queryHistory.put(resource, new HashMap<String, Set<Condition>>());
         resourceViews.put(resource, new HashMap<String, View>());
     }
 
@@ -51,7 +51,7 @@ public class InMemoryCacheManagerRepo implements CacheManagerRepo {
             if (this.queryHistory.get(resource).containsKey(view) || this.resourceViews.get(resource).containsKey(view))
                 throw new ExistsException(view + " already exists");
 
-            this.queryHistory.get(resource).put(view.getName(), new HashMap<String, Condition>());
+            this.queryHistory.get(resource).put(view.getName(), new HashSet<Condition>());
         }
         else {
             createResource(resource);
@@ -64,17 +64,17 @@ public class InMemoryCacheManagerRepo implements CacheManagerRepo {
         return getQueryExists(queryHistory.get(resource).get(view), conditions);
     }
 
-    private boolean getQueryExists(Map<String, Condition> existing, Condition[] current) {
+    private boolean getQueryExists(Set<Condition> existing, Condition[] current) {
 
         boolean ret = false;
         for (Condition curr: current)
-            if (!conditionIsContained(existing, curr))
+            if (!existing.contains(curr))
                 for (Condition exists: existing) if (conditionIsContained(exists, curr)) ret = true;
         return ret;
     }
 
     @SuppressWarnings("unchecked")
-    private boolean conditionIsContained(Map<String, Condition> conditionMap, Condition current) {
+    private boolean conditionIsContained(Set<Condition> conditionMap, Condition current) {
         return false;
     }
 
