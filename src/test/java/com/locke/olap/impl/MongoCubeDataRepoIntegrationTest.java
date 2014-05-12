@@ -1,28 +1,16 @@
 package com.locke.olap.impl;
 
+import com.locke.IntegrationTestCase;
 import com.locke.olap.CubeDataRepo;
 import com.locke.olap.models.DataNode;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
+import com.mongodb.CommandFailureException;
 import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
-import de.flapdoodle.embed.mongo.Command;
-import de.flapdoodle.embed.mongo.MongodExecutable;
-import de.flapdoodle.embed.mongo.MongodStarter;
-import de.flapdoodle.embed.mongo.config.IMongodConfig;
-import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
-import de.flapdoodle.embed.mongo.config.Net;
-import de.flapdoodle.embed.mongo.config.RuntimeConfigBuilder;
-import de.flapdoodle.embed.mongo.distribution.Version;
-import de.flapdoodle.embed.process.config.IRuntimeConfig;
-import de.flapdoodle.embed.process.config.io.ProcessOutput;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import static junit.framework.Assert.assertNotNull;
 
@@ -30,39 +18,20 @@ import static junit.framework.Assert.assertNotNull;
  * @author David Gilmore
  * @date 5/4/14
  */
-public class MongoCubeDataRepoIntegrationTest {
+public class MongoCubeDataRepoIntegrationTest extends IntegrationTestCase {
 
-    private DB mongoDB;
-    private MongodExecutable mongodExecutable;
     private CubeDataRepo cubeDataRepo;
 
     @Before
     public void setUp() throws Exception {
 
-        Logger logger = Logger.getLogger(getClass().getName());
+        DBCollection col;
 
-        IRuntimeConfig runtimeConfig = new RuntimeConfigBuilder()
-                .defaultsWithLogger(Command.MongoD, logger)
-                .processOutput(ProcessOutput.getDefaultInstanceSilent())
-                .build();
-
-        MongodStarter runtime = MongodStarter.getInstance(runtimeConfig);
-
-        int port = 12345;
-
-        IMongodConfig mongodConfig = new MongodConfigBuilder()
-                .version(Version.Main.PRODUCTION)
-                .net(new Net(port, true))
-                .build();
-
-        this.mongodExecutable = runtime.prepare(mongodConfig);
-        this.mongodExecutable.start();
-
-        MongoClient mongo = new MongoClient("localhost", port);
-
-        this.mongoDB = mongo.getDB("test");
-
-        DBCollection col = mongoDB.createCollection("test_cube", new BasicDBObject());
+        try {
+            col = mongoDB.createCollection("test_cube", new BasicDBObject());
+        } catch (CommandFailureException e) {
+            col = mongoDB.getCollection("test_cube");
+        }
 
         Map<String, Object> values1 = new HashMap<>();
         values1.put("name", "garfield");
@@ -86,12 +55,6 @@ public class MongoCubeDataRepoIntegrationTest {
         mongoCubeDataRepo.setMongoDb(this.mongoDB);
 
         this.cubeDataRepo = mongoCubeDataRepo;
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        if (this.mongodExecutable != null)
-            this.mongodExecutable.stop();
     }
 
     @Test

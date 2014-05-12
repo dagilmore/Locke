@@ -1,17 +1,19 @@
-package com.locke.olap.impl;
+package com.locke.olap.models;
 
 /**
  * @author David Gilmore
  * @date 4/18/14
  */
-public class Condition {
+public class Condition<T extends Comparable> {
 
     private String view;
-    private String left;
-    private String right;
+    private T left;
+    private T right;
     private String operator;
+    private Condition and;
+    private Condition or;
 
-    public Condition(String view, String left, String right, String operator) {
+    public Condition(String view, T left, T right, String operator) {
         this.view = view;
         this.left = left;
         this.right = right;
@@ -26,19 +28,19 @@ public class Condition {
         this.view = view;
     }
 
-    public String getLeft() {
+    public T getLeft() {
         return left;
     }
 
-    public void setLeft(String left) {
+    public void setLeft(T left) {
         this.left = left;
     }
 
-    public String getRight() {
+    public T getRight() {
         return right;
     }
 
-    public void setRight(String right) {
+    public void setRight(T right) {
         this.right = right;
     }
 
@@ -48,5 +50,21 @@ public class Condition {
 
     public void setOperator(String operator) {
         this.operator = operator;
+    }
+
+    public Condition getAnd() {
+        return and;
+    }
+
+    public void setAnd(Condition and) {
+        this.and = and;
+    }
+
+    public Condition getOr() {
+        return or;
+    }
+
+    public void setOr(Condition or) {
+        this.or = or;
     }
 }

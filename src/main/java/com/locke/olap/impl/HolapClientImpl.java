@@ -1,7 +1,9 @@
 package com.locke.olap.impl;
 
 import com.locke.olap.*;
-import com.locke.olap.error.QueryDoesNotExistException;
+import com.locke.olap.error.DoesNotExistException;
+import com.locke.olap.error.ExistsException;
+import com.locke.olap.models.Condition;
 import com.locke.olap.models.DataNode;
 import com.locke.olap.models.View;
 import org.apache.log4j.Logger;
@@ -26,16 +28,41 @@ public class HolapClientImpl implements HolapClient {
     /**
      *
      * @param resource
+     */
+    @Override
+    public void createResource(String resource) throws ExistsException {
+
+        this.cacheManager.createResource(resource);
+    }
+
+    /**
+     *
+     * @param resource
+     * @param view
+     */
+    @Override
+    public void createView(String resource, View view) throws ExistsException {
+
+        if (cacheManager.getResource(resource) == null)
+            createResource(resource);
+
+        this.cacheManager.createView(resource, view);
+    }
+
+    /**
+     *
+     * @param resource
      * @param viewName
      * @param conditions
      * @return
-     * @throws QueryDoesNotExistException
+     * @throws com.locke.olap.error.DoesNotExistException
      */
     @Override
-    public DataNode query(String resource, String viewName, Condition... conditions) throws QueryDoesNotExistException {
+    public DataNode query(String resource, String viewName, Condition... conditions) throws DoesNotExistException {
 
         DataNode ret;
-        View view = cacheManager.getQuery(resource, viewName);
+
+        View view = cacheManager.getView(resource, viewName);
 
         if (cacheManager.getQueryExists(resource, viewName, conditions)) {
             ret = cubeRepo.query(resource, viewName, conditions);
@@ -43,6 +70,8 @@ public class HolapClientImpl implements HolapClient {
 
         else {
             ret = warehouseRepo.query(resource, view, conditions);
+            cubeRepo.save(resource, viewName, ret);
+            cacheManager.setQueryExists(resource, viewName, conditions);
         }
 
         return ret;
