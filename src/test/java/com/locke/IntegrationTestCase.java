@@ -21,6 +21,7 @@ import java.net.ServerSocket;
 import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -121,7 +122,46 @@ public abstract class IntegrationTestCase {
             }
 
             jdbcTemplate = new JdbcTemplate(ds);
+
+            try {
+                populateTables();
+            } catch (SQLException e) {
+                logger.log(Level.SEVERE, e.getMessage());
+            }
         }
+    }
+
+    private static void populateTables() throws SQLException {
+
+        //Set up test data in H2 data warehouse
+        String[] names = new String[] { "locke", "berkely", "hume", "hobbes", "descartes", "spinoza", "leibniz" };
+        String[] items = new String[] { "scroll", "quill", "apple", "lantern", "telescope", "milk", "eggs" };
+        String[] days = new String[] { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" };
+
+        Statement stat = conn.createStatement();
+
+        stat.execute("create table test_table(id int primary key, name varchar(255), item varchar(255), day varchar(255), amount double)");
+
+        String insert = "insert into test_table values(%1$s, '%2$s', '%3$s', '%4$s', %5$s)";
+
+        Random r = new Random();
+
+        String name, item, day;
+        double amount;
+
+        for (int i = 0; i < 50; i++) {
+
+            name = names[i % 7];
+            item = items[r.nextInt(7)];
+            day = days[r.nextInt(7)];
+
+            amount = r.nextDouble() + i + 100;
+
+            stat.execute(String.format(insert, new Integer(i+100), name, item, day, amount));
+        }
+
+        stat.close();
+
     }
 
     private static int getOpenPort() {

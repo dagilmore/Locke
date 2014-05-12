@@ -51,8 +51,10 @@ public class InMemoryCacheManagerRepo implements CacheManagerRepo {
             if (this.queryHistory.get(resource).containsKey(view) || this.resourceViews.get(resource).containsKey(view))
                 throw new ExistsException(view + " already exists");
 
+            this.resourceViews.get(resource).put(view.getName(), view);
             this.queryHistory.get(resource).put(view.getName(), new HashSet<Condition>());
         }
+
         else {
             createResource(resource);
             createView(resource, view);

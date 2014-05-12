@@ -31,9 +31,9 @@ public class H2JdbcWarehouseRepoIntegrationTest extends IntegrationTestCase {
 
         Statement stat = conn.createStatement();
 
-        stat.execute("create table test_table(id int primary key, name varchar(255),type varchar(255), amount double)");
+        stat.execute("create table test_cats(id int primary key, name varchar(255),type varchar(255), amount double)");
 
-        String insert = "insert into test_table values(%1$s, '%2$s', '%3$s', %4$s)";
+        String insert = "insert into test_cats values(%1$s, '%2$s', '%3$s', %4$s)";
         String name, type;
 
         for (int i = 0; i < 50; i++) {
@@ -60,10 +60,11 @@ public class H2JdbcWarehouseRepoIntegrationTest extends IntegrationTestCase {
 
         Statement stat = conn.createStatement();
 
-        stat.execute("drop table test_table");
+        stat.execute("drop table test_cats");
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testQuery() throws Exception {
 
         SelectView select = new SelectView();
@@ -78,15 +79,15 @@ public class H2JdbcWarehouseRepoIntegrationTest extends IntegrationTestCase {
         functions.put("amount", "SUM");
 
         List<Condition> where = new LinkedList<>();
-        where.add(new Condition("test_table", "name", "'tom'", "="));
-        where.add(new Condition("test_table", "type", "'cat'", "="));
+        where.add(new Condition("test_cats", "name", "'tom'", "="));
+        where.add(new Condition("test_cats", "type", "'cat'", "="));
 
         List<String> group = new LinkedList<>();
         group.add("name");
         group.add("type");
 
         TableView from = new TableView();
-        from.setName("test_table");
+        from.setName("test_cats");
 
         select.setResource("test");
         select.setName("test_aggregate");

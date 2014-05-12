@@ -51,6 +51,9 @@ public class MongoCubeDataRepo implements CubeDataRepo {
                     Map<Object, Object> map = (Map) item;
 
                     DBObject obj = new BasicDBObject();
+
+                    obj.put("viewName", view);
+
                     Iterator it = map.entrySet().iterator();
 
                     while (it.hasNext()) {
