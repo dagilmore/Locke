@@ -68,11 +68,11 @@ public class InMemoryCacheManagerRepo implements CacheManagerRepo {
 
     private boolean getQueryExists(Set<Condition> existing, Condition[] current) {
 
-        boolean ret = false;
         for (Condition curr: current)
-            if (!existing.contains(curr))
-                for (Condition exists: existing) if (conditionIsContained(exists, curr)) ret = true;
-        return ret;
+            if (existing.contains(curr)) return true;
+            else for (Condition exists: existing) if (conditionIsContained(exists, curr)) return true;
+
+        return false;
     }
 
     @SuppressWarnings("unchecked")

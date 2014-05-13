@@ -24,7 +24,7 @@ public class MongoCubeDataRepo implements CubeDataRepo {
 
         DBCollection coll = mongoDb.getCollection(resource);
 
-        BasicDBObject baseQuery = new BasicDBObject("view", view);
+        BasicDBObject baseQuery = new BasicDBObject("viewName", view);
 
         DBCursor cur = coll.find(baseQuery);
 

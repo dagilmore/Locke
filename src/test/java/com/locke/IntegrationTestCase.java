@@ -131,7 +131,7 @@ public abstract class IntegrationTestCase {
         }
     }
 
-    private static void populateTables() throws SQLException {
+    protected static void populateTables() throws SQLException {
 
         //Set up test data in H2 data warehouse
         String[] names = new String[] { "locke", "berkely", "hume", "hobbes", "descartes", "spinoza", "leibniz" };
@@ -160,6 +160,14 @@ public abstract class IntegrationTestCase {
             stat.execute(String.format(insert, new Integer(i+100), name, item, day, amount));
         }
 
+        stat.close();
+
+    }
+
+    protected static void destroyTables() throws SQLException {
+
+        Statement stat = conn.createStatement();
+        stat.execute("drop table test_table");
         stat.close();
 
     }

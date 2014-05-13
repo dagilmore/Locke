@@ -25,10 +25,6 @@ public class HolapClientImplIntegrationTest extends IntegrationTestCase {
 
     private HolapClient holapClient;
 
-    private CubeDataRepo cubeDataRepo;
-    private CacheManagerRepo cacheManagerRepo;
-    private WarehouseRepo warehouseRepo;
-
     private View testTable;
 
     @Before
@@ -39,15 +35,15 @@ public class HolapClientImplIntegrationTest extends IntegrationTestCase {
         
         JdbcWarehouseRepo jdbcWarehouseRepo = new JdbcWarehouseRepo();
         jdbcWarehouseRepo.setJdbcTemplate(jdbcTemplate);
-        
-        this.cubeDataRepo = mongoCubeDataRepo;
-        this.warehouseRepo = jdbcWarehouseRepo;
-        this.cacheManagerRepo = new InMemoryCacheManagerRepo();
+
+        CubeDataRepo cubeDataRepo = mongoCubeDataRepo;
+        WarehouseRepo warehouseRepo = jdbcWarehouseRepo;
+        CacheManagerRepo cacheManagerRepo = new InMemoryCacheManagerRepo();
 
         HolapClientImpl holapClientImpl = new HolapClientImpl();
-        holapClientImpl.setCubeRepo(this.cubeDataRepo);
-        holapClientImpl.setWarehouseRepo(this.warehouseRepo);
-        holapClientImpl.setCacheManager(this.cacheManagerRepo);
+        holapClientImpl.setCubeRepo(cubeDataRepo);
+        holapClientImpl.setWarehouseRepo(warehouseRepo);
+        holapClientImpl.setCacheManager(cacheManagerRepo);
         
         this.holapClient = holapClientImpl;
 
@@ -73,9 +69,7 @@ public class HolapClientImplIntegrationTest extends IntegrationTestCase {
         this.holapClient.createResource("philosophers");
         this.holapClient.createView("philosophers", simpleSelect);
 
-        DataNode data = this.holapClient.query("philosophers", "", new Condition("","","",""));
-
-
+        this.holapClient.query("philosophers", "", new Condition("","","",""));
 
         //Assert that mongoDB was updated appropriately
         DBCollection coll = mongoDB.getCollection("philosophers");
@@ -84,5 +78,11 @@ public class HolapClientImplIntegrationTest extends IntegrationTestCase {
         query.put("viewName", "");
 
         assertEquals(50, coll.count(query));
+
+        //Destroy datawarehouse tables to ensure that future queries come from the cube
+        destroyTables();
+
+        DataNode data = this.holapClient.query("philosophers", "", new Condition("","","",""));
+        assertEquals(50, ( (List) data.getData()).size());
     }
 }
