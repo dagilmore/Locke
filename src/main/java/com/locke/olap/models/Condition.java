@@ -7,16 +7,16 @@ package com.locke.olap.models;
 public class Condition<T extends Comparable> {
 
     private String view;
-    private T left;
-    private T right;
+    private T field;
+    private T value;
     private String operator;
     private Condition and;
     private Condition or;
 
-    public Condition(String view, T left, T right, String operator) {
+    public Condition(String view, T field, T value, String operator) {
         this.view = view;
-        this.left = left;
-        this.right = right;
+        this.field = field;
+        this.value = value;
         this.operator = operator;
     }
 
@@ -28,20 +28,20 @@ public class Condition<T extends Comparable> {
         this.view = view;
     }
 
-    public T getLeft() {
-        return left;
+    public T getField() {
+        return field;
     }
 
-    public void setLeft(T left) {
-        this.left = left;
+    public void setField(T field) {
+        this.field = field;
     }
 
-    public T getRight() {
-        return right;
+    public T getValue() {
+        return value;
     }
 
-    public void setRight(T right) {
-        this.right = right;
+    public void setValue(T value) {
+        this.value = value;
     }
 
     public String getOperator() {
@@ -76,10 +76,10 @@ public class Condition<T extends Comparable> {
         Condition condition = (Condition) o;
 
         if (and != null ? !and.equals(condition.and) : condition.and != null) return false;
-        if (left != null ? !left.equals(condition.left) : condition.left != null) return false;
+        if (field != null ? !field.equals(condition.field) : condition.field != null) return false;
         if (operator != null ? !operator.equals(condition.operator) : condition.operator != null) return false;
         if (or != null ? !or.equals(condition.or) : condition.or != null) return false;
-        if (right != null ? !right.equals(condition.right) : condition.right != null) return false;
+        if (value != null ? !value.equals(condition.value) : condition.value != null) return false;
         if (view != null ? !view.equals(condition.view) : condition.view != null) return false;
 
         return true;
@@ -88,8 +88,8 @@ public class Condition<T extends Comparable> {
     @Override
     public int hashCode() {
         int result = view != null ? view.hashCode() : 0;
-        result = 31 * result + (left != null ? left.hashCode() : 0);
-        result = 31 * result + (right != null ? right.hashCode() : 0);
+        result = 31 * result + (field != null ? field.hashCode() : 0);
+        result = 31 * result + (value != null ? value.hashCode() : 0);
         result = 31 * result + (operator != null ? operator.hashCode() : 0);
         result = 31 * result + (and != null ? and.hashCode() : 0);
         result = 31 * result + (or != null ? or.hashCode() : 0);

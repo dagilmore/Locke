@@ -3,6 +3,7 @@ package com.locke.olap.impl;
 import com.locke.olap.*;
 import com.locke.olap.error.DoesNotExistException;
 import com.locke.olap.error.ExistsException;
+import com.locke.olap.error.MalformedViewException;
 import com.locke.olap.models.Condition;
 import com.locke.olap.models.DataNode;
 import com.locke.olap.models.View;
@@ -41,7 +42,7 @@ public class HolapClientImpl implements HolapClient {
      * @param view
      */
     @Override
-    public void createView(String resource, View view) throws ExistsException {
+    public void createView(String resource, View view) throws ExistsException, MalformedViewException {
 
         if (cacheManager.getResource(resource) == null)
             createResource(resource);
@@ -58,6 +59,7 @@ public class HolapClientImpl implements HolapClient {
      * @throws com.locke.olap.error.DoesNotExistException
      */
     @Override
+    @SuppressWarnings("unchecked")
     public DataNode query(String resource, String viewName, Condition... conditions) throws DoesNotExistException {
 
         DataNode ret;
@@ -69,9 +71,14 @@ public class HolapClientImpl implements HolapClient {
         }
 
         else {
-            ret = warehouseRepo.query(resource, view, conditions);
-            cubeRepo.save(resource, viewName, ret);
-            cacheManager.setQueryExists(resource, viewName, conditions);
+            try {
+                ret = warehouseRepo.query(resource, view, conditions);
+                cubeRepo.save(resource, viewName, ret);
+                cacheManager.setQueryExists(resource, viewName, conditions);
+            } catch (MalformedViewException e) {
+                //Should not be thrown
+                ret = new DataNode("");
+            }
         }
 
         return ret;

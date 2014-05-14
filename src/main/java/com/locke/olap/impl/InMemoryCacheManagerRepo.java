@@ -83,16 +83,16 @@ public class InMemoryCacheManagerRepo implements CacheManagerRepo {
 
         else {
 
-            if (exists.getLeft().equals(current.getLeft())) {
+            if (exists.getField().equals(current.getField())) {
 
                 if (exists.getOperator().equals(current.getOperator())) {
 
-                    if (exists.getRight().getClass() != current.getRight().getClass()) return false;
+                    if (exists.getValue().getClass() != current.getValue().getClass()) return false;
 
                     switch (exists.getOperator()) {
-                        case ">": if (exists.getRight().compareTo(current.getRight()) < 0) return true; return false;
-                        case "<": if (exists.getRight().compareTo(current.getRight()) > 0) return true; return false;
-                        case "=": if (exists.getRight().equals(current.getRight())) return true; return false;
+                        case ">": if (exists.getValue().compareTo(current.getValue()) < 0) return true; return false;
+                        case "<": if (exists.getValue().compareTo(current.getValue()) > 0) return true; return false;
+                        case "=": if (exists.getValue().equals(current.getValue())) return true; return false;
                         default: return false;
                     }
                 }

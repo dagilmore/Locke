@@ -2,6 +2,7 @@ package com.locke.olap.impl;
 
 import com.locke.olap.ViewGenerator;
 import com.locke.olap.WarehouseRepo;
+import com.locke.olap.error.MalformedViewException;
 import com.locke.olap.models.Condition;
 import com.locke.olap.models.DataNode;
 import com.locke.olap.models.View;
@@ -23,12 +24,12 @@ public class JdbcWarehouseRepo implements WarehouseRepo {
     private JdbcTemplate jdbcTemplate;
 
     public JdbcWarehouseRepo() {
-        this.viewGenerator = new JdbcSqlViewGenerator();
+        this.viewGenerator = new HiveQLViewGenerator();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public DataNode query(String resource, View view, Condition... conditions) throws DataAccessException {
+    public DataNode query(String resource, View view, Condition... conditions) throws DataAccessException, MalformedViewException {
 
         String query = viewGenerator.createQuery(view);
 

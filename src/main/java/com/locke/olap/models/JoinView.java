@@ -8,10 +8,14 @@ import java.util.List;
  */
 public class JoinView extends View {
 
+    public enum Join { INNER, LEFT_OUTER, RIGHT_OUTER, FULL_OUTER, CROSS }
+
     private View left;
     private View right;
-    private List<Condition> joinConditions;
-    private List<Condition> whereConditions;
+    private List<Condition> on;
+    private List<Condition> where;
+    private List<String> group;
+    private Join type;
 
 
     public View getLeft() {
@@ -30,19 +34,35 @@ public class JoinView extends View {
         this.right = right;
     }
 
-    public List<Condition> getJoinConditions() {
-        return joinConditions;
+    public List<Condition> getOn() {
+        return on;
     }
 
-    public void setJoinConditions(List<Condition> joinConditions) {
-        this.joinConditions = joinConditions;
+    public void setOn(List<Condition> on) {
+        this.on = on;
     }
 
-    public List<Condition> getWhereConditions() {
-        return whereConditions;
+    public List<Condition> getWhere() {
+        return where;
     }
 
-    public void setWhereConditions(List<Condition> whereConditions) {
-        this.whereConditions = whereConditions;
+    public void setWhere(List<Condition> where) {
+        this.where = where;
+    }
+
+    public List<String> getGroup() {
+        return group;
+    }
+
+    public void setGroup(List<String> group) {
+        this.group = group;
+    }
+
+    public Join getType() {
+        return type;
+    }
+
+    public void setType(Join type) {
+        this.type = type;
     }
 }

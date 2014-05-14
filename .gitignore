@@ -14,6 +14,7 @@ target/
 #data
 data/
 out/
+docs/
 
 #hive metastore and such
 metastore_db/

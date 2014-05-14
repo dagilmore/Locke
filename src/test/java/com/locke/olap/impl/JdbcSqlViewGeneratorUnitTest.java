@@ -2,6 +2,7 @@ package com.locke.olap.impl;
 
 
 import com.locke.olap.models.Condition;
+import com.locke.olap.models.JoinView;
 import com.locke.olap.models.SelectView;
 import com.locke.olap.models.TableView;
 import org.junit.Before;
@@ -18,11 +19,11 @@ import static junit.framework.Assert.assertNotNull;
  */
 public class JdbcSqlViewGeneratorUnitTest {
 
-    private JdbcSqlViewGenerator jdbcSqlViewGenerator;
+    private HiveQLViewGenerator hiveQLViewGenerator;
 
     @Before
     public void setUp() throws Exception {
-        this.jdbcSqlViewGenerator = new JdbcSqlViewGenerator();
+        this.hiveQLViewGenerator = new HiveQLViewGenerator();
     }
 
     @Test
@@ -48,7 +49,7 @@ public class JdbcSqlViewGeneratorUnitTest {
 
         selectView.setFrom(from);
 
-        String query = this.jdbcSqlViewGenerator.createQuery(selectView);
+        String query = this.hiveQLViewGenerator.createQuery(selectView);
 
         assertEquals("select name, type, amount from test.test_table", query);
     }
@@ -75,12 +76,13 @@ public class JdbcSqlViewGeneratorUnitTest {
 
         selectView.setFrom(from);
 
-        String query = this.jdbcSqlViewGenerator.createQuery(selectView);
+        String query = this.hiveQLViewGenerator.createQuery(selectView);
 
         assertEquals("select name, type, amount from test_table", query);
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testCreateView__NestedSelectWithFunctions() throws Exception {
 
         SelectView from = new SelectView();
@@ -122,8 +124,175 @@ public class JdbcSqlViewGeneratorUnitTest {
         selectView.setColumns(columns);
         selectView.setFrom(from);
 
-        String query = this.jdbcSqlViewGenerator.createQuery(selectView);
+        String query = this.hiveQLViewGenerator.createQuery(selectView);
+
+        assertNotNull(query);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testCreateView__SelectWithJoin() throws Exception {
+
+        SelectView selectView = new SelectView();
+
+        List<String> columns = new ArrayList<>(
+                Arrays.asList("pac_contributions.bioguide_id",
+                              "individual_contributions",
+                              "pac_contributions")
+        );
+
+        selectView.setColumns(columns);
+
+
+            JoinView leftJoinView = new JoinView();
+
+                SelectView leftLeftSubSelect = new SelectView();
+
+                columns = new ArrayList<>(
+                        Arrays.asList("bioguide_id",
+                                      "amount")
+                );
+
+                leftLeftSubSelect.setColumns(columns);
+
+                Map<String, String> functions = new HashMap<>(), aliases = new HashMap<>();
+
+                functions.put("amount", "sum");
+                aliases.put("amount", "pac_contributions");
+
+                leftLeftSubSelect.setFunctions(functions);
+                leftLeftSubSelect.setAlias(aliases);
+
+            leftJoinView.setLeft(leftLeftSubSelect);
+
+                TableView leftRightTableView = new TableView();
+
+                leftRightTableView.setResource("entities");
+                leftRightTableView.setName("legislators");
+
+
+            leftJoinView.setRight(leftRightTableView);
+
+            List<Condition> on = new ArrayList<>(Arrays.asList(
+                    new Condition("", "cid", "opensecrets_id", "=")
+            ));
+
+            List<Condition> where = new ArrayList<>(Arrays.asList(
+                    new Condition("", "cid", "'24K'", "=")
+            ));
+
+            List<String> group = new ArrayList<>(Arrays.asList("bioguide_id"));
+
+            leftJoinView.setOn(on);
+            leftJoinView.setWhere(where);
+            leftJoinView.setType(JoinView.Join.INNER);
+            leftJoinView.setGroup(group);
+            leftJoinView.setName("pac_contributions");
+
+
+            JoinView rightJoinView = new JoinView();
+
+                SelectView rightLeftSubSelect = new SelectView();
+
+                columns = new ArrayList<>(
+                        Arrays.asList("bioguide_id",
+                                      "amount")
+                );
+
+                rightLeftSubSelect.setColumns(columns);
+
+                functions = new HashMap<>();
+                aliases = new HashMap<>();
+
+                functions.put("amount", "sum");
+                aliases.put("amount", "individual_contributions");
+
+                rightLeftSubSelect.setFunctions(functions);
+                rightLeftSubSelect.setAlias(aliases);
+
+            rightJoinView.setLeft(rightLeftSubSelect);
+
+                TableView rightRightTableView = new TableView();
+
+                rightRightTableView.setResource("entities");
+                rightRightTableView.setName("legislators");
+
+
+            rightJoinView.setRight(rightRightTableView);
+
+            on = new ArrayList<>(Arrays.asList(
+                        new Condition("", "recip_id", "opensecrets_id", "=")
+            ));
+
+
+            rightJoinView.setOn(on);
+            rightJoinView.setWhere(where);
+            rightJoinView.setType(JoinView.Join.INNER);
+            rightJoinView.setGroup(group);
+            rightJoinView.setName("individual_contributions");
+
+        functions = new HashMap<>();
+        aliases = new HashMap<>();
+
+        functions.put("amount", "sum");
+        aliases.put("amount", "individual_contributions");
+
+        JoinView joinView = new JoinView();
+
+        joinView.setLeft(leftJoinView);
+        joinView.setRight(rightJoinView);
+
+
+        joinView.setType(JoinView.Join.FULL_OUTER);
+
+        selectView.setFrom(joinView);
+
+        on = new ArrayList<>(Arrays.asList(
+                new Condition("", "cid", "opensecrets_id", "=")
+        ));
+
+        where = new ArrayList<>(Arrays.asList(
+                new Condition("", "cid", "'24K'", "=")
+        ));
+
+        String query = hiveQLViewGenerator.createQuery(selectView);
 
         assertNotNull(query);
     }
 }
+
+// SELECT DISTINCT
+//       pac_contributions.bioguide_id
+//     , individual_contributions
+//     , pac_contributions
+// FROM
+//
+//   (SELECT
+//         bioguide_id
+//       , SUM(amount) as pac_contributions
+//   FROM
+//       crp.pac_to_candidate_contributions
+//   JOIN
+//         entities.legislators
+//     ON
+//         cid = opensecrets_id
+//   WHERE
+//       type = '24K'
+//   GROUP BY
+//         bioguide_id
+//   ) pac_contributions
+// FULL OUTER JOIN
+//
+//   (SELECT
+//         bioguide_id
+//       , SUM(amount) as individual_contributions
+//   FROM
+//       crp.individual_contributions
+//   JOIN
+//         entities.legislators
+//     ON
+//         recip_id = opensecrets_id
+//   GROUP BY
+//         bioguide_id ) individual_contributions
+// ON
+//     pac_contributions.bioguide_id = individual_contributions.bioguide_id;
