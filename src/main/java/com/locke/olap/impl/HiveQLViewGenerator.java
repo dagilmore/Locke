@@ -44,8 +44,7 @@ public class HiveQLViewGenerator implements ViewGenerator {
 
             JoinView j = (JoinView) view;
 
-            SelectBuilder builder = new SelectBuilder();
-            String query = "";
+            String query = (subQuery) ? " ( ": "";
 
             switch (j.getJoin()) {
                 case INNER: query = createQuery(j.getLeft()) + " join " + createQuery(j.getRight()); break;
@@ -56,18 +55,27 @@ public class HiveQLViewGenerator implements ViewGenerator {
             }
 
             if (j.getOn() != null) {
-                for (Condition cond: j.getOn()) {
-                    builder.where(cond.getView() + "." + cond.getField() + ops.get(cond.getOperator()) + cond.getValue());
-                }
+
+                query += " ON ";
+
+
+//                for (Condition cond: j.getOn()) {
+//                    builder.where(cond.getView() + "." + cond.getField() + ops.get(cond.getOperator()) + cond.getValue());
+//                }
             }
 
             if (j.getWhere() != null) {
-                for (Condition cond: j.getWhere()) {
-                    builder.where(cond.getView() + "." + cond.getField() + ops.get(cond.getOperator()) + cond.getValue());
-                }
+
+                query += " WHERE ";
+
+//                for (Condition cond: j.getWhere()) {
+//                    builder.where(cond.getView() + "." + cond.getField() + ops.get(cond.getOperator()) + cond.getValue());
+//                }
             }
 
-            return query + builder;
+            query += (subQuery) ? " ) " + j.getName() + " " : "";
+
+            return query;
         }
 
         else if (view.getClass() == SelectView.class) {
@@ -105,12 +113,17 @@ public class HiveQLViewGenerator implements ViewGenerator {
                 query.from(createQuery(selectView.getFrom(), true));
 
             if (selectView.getWhere() != null) {
-                for (Condition cond: selectView.getWhere()) {
-                    query.where(cond.getView() + "." + cond.getField() + ops.get(cond.getOperator()) + cond.getValue());
-                }
+                //TODO: implement condition set logic
+//                for (Condition cond: selectView.getWhere()) {
+//                    query.where(cond.getView() + "." + cond.getField() + ops.get(cond.getOperator()) + cond.getValue());
+//                }
             }
 
-            if (selectView.getGroup() != null) for (String col: selectView.getGroup()) query.groupBy(col);
+            if (selectView.getGroup() != null) {
+                for (Object col : selectView.getGroup()) {
+                    query.groupBy( (String) col);
+                }
+            }
 
             return query.toString();
         }

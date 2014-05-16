@@ -1,11 +1,8 @@
 package com.locke.olap.impl;
 
 
-import com.locke.olap.models.Condition;
+import com.locke.olap.models.*;
 import com.locke.olap.models.Condition.Operator;
-import com.locke.olap.models.JoinView;
-import com.locke.olap.models.SelectView;
-import com.locke.olap.models.TableView;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +15,7 @@ import static junit.framework.Assert.assertNotNull;
  * @author David Gilmore
  * @date 4/17/14
  */
-public class JdbcSqlViewGeneratorUnitTest {
+public class HiveQLViewGeneratorUnitTest {
 
     private HiveQLViewGenerator hiveQLViewGenerator;
 
@@ -97,9 +94,9 @@ public class JdbcSqlViewGeneratorUnitTest {
         Map<String, String> functions = new HashMap<>();
         functions.put("amount", "SUM");
 
-        List<Condition> where = new LinkedList<>();
-        where.add(new Condition("test_subquery", "name", "tom", Operator.EQ));
-        where.add(new Condition("test_subquery", "type", "person", Operator.EQ));
+        ConditionSet where = new ConditionSet();
+        where.and(new Condition("test_subquery", "name", "tom", Operator.EQ));
+        where.and(new Condition("test_subquery", "type", "person", Operator.EQ));
 
         List<String> group = new LinkedList<>();
         group.add("name");
@@ -174,13 +171,9 @@ public class JdbcSqlViewGeneratorUnitTest {
 
             leftJoinView.setRight(leftRightTableView);
 
-            List<Condition> on = new ArrayList<>(Arrays.asList(
-                    new Condition("", "cid", "opensecrets_id", Operator.EQ)
-            ));
+            Condition on = new Condition("", "cid", "opensecrets_id", Operator.EQ);
 
-            List<Condition> where = new ArrayList<>(Arrays.asList(
-                    new Condition("", "cid", "'24K'", Operator.EQ)
-            ));
+            Condition where = new Condition("", "cid", "'24K'", Operator.EQ);
 
             List<String> group = new ArrayList<>(Arrays.asList("bioguide_id"));
 
@@ -221,9 +214,7 @@ public class JdbcSqlViewGeneratorUnitTest {
 
             rightJoinView.setRight(rightRightTableView);
 
-            on = new ArrayList<>(Arrays.asList(
-                        new Condition("", "recip_id", "opensecrets_id", Operator.EQ)
-            ));
+            on = new Condition("", "recip_id", "opensecrets_id", Operator.EQ);
 
 
             rightJoinView.setOn(on);
@@ -248,13 +239,9 @@ public class JdbcSqlViewGeneratorUnitTest {
 
         selectView.setFrom(joinView);
 
-        on = new ArrayList<>(Arrays.asList(
-                new Condition("", "cid", "opensecrets_id", Operator.EQ)
-        ));
+        on = new Condition("", "cid", "opensecrets_id", Operator.EQ);
 
-        where = new ArrayList<>(Arrays.asList(
-                new Condition("", "cid", "'24K'", Operator.EQ)
-        ));
+        where = new Condition("", "cid", "'24K'", Operator.EQ);
 
         String query = hiveQLViewGenerator.createQuery(selectView);
 

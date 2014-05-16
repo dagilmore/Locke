@@ -1,6 +1,7 @@
 package com.locke.olap.impl;
 
 import com.locke.olap.ViewGenerator;
+import com.locke.olap.models.Condition;
 import com.locke.olap.models.SelectView;
 import org.easymock.IMocksControl;
 import org.junit.Before;
@@ -49,7 +50,7 @@ public class JdbcWarehouseRepoUnitTest {
 
         this.control.replay();
 
-        this.jdbcWarehouseRepo.query("resource", view, null);
+        this.jdbcWarehouseRepo.query("resource", view, new Condition());
 
         this.control.verify();
     }

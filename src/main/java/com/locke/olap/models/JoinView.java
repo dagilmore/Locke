@@ -7,14 +7,14 @@ import java.util.Map;
  * @author David Gilmore
  * @date 4/18/14
  */
-public class JoinView extends View {
+public class JoinView<T extends Conditional> extends View {
 
     public enum Join { INNER, LEFT_OUTER, RIGHT_OUTER, FULL_OUTER, CROSS }
 
     private View left;
     private View right;
-    private List<Condition> on;
-    private List<Condition> where;
+    private T on;
+    private T where;
     private List<String> group;
     private Join join;
     private Map<String, String> functions;
@@ -38,19 +38,19 @@ public class JoinView extends View {
         this.right = right;
     }
 
-    public List<Condition> getOn() {
+    public T getOn() {
         return on;
     }
 
-    public void setOn(List<Condition> on) {
+    public void setOn(T on) {
         this.on = on;
     }
 
-    public List<Condition> getWhere() {
+    public T getWhere() {
         return where;
     }
 
-    public void setWhere(List<Condition> where) {
+    public void setWhere(T where) {
         this.where = where;
     }
 

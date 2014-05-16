@@ -2,6 +2,7 @@ package com.locke.olap.impl;
 
 import com.locke.IntegrationTestCase;
 import com.locke.olap.CubeDataRepo;
+import com.locke.olap.models.Condition;
 import com.locke.olap.models.DataNode;
 import com.mongodb.BasicDBObject;
 import com.mongodb.CommandFailureException;
@@ -60,7 +61,7 @@ public class MongoCubeDataRepoIntegrationTest extends IntegrationTestCase {
     @Test
     public void testQuery() throws Exception {
 
-        DataNode ret = cubeDataRepo.query("test_cube", "test_aggregate", null);
+        DataNode ret = cubeDataRepo.query("test_cube", "test_aggregate", new Condition());
         assertNotNull(ret);
     }
 

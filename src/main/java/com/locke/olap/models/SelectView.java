@@ -7,13 +7,13 @@ import java.util.Map;
  * @author David Gilmore
  * @date 4/18/14
  */
-public class SelectView extends View {
+public class SelectView<T extends Conditional> extends View {
 
     private View from;
     private List<String> group;
     private Map<String, String> functions;
     private Map<String, String> alias;
-    private List<Condition> where;
+    private T where;
     private boolean distinct;
 
     public List<String> getGroup() {
@@ -48,11 +48,11 @@ public class SelectView extends View {
         this.alias = alias;
     }
 
-    public List<Condition> getWhere() {
+    public T getWhere() {
         return where;
     }
 
-    public void setWhere(List<Condition> where) {
+    public void setWhere(T where) {
         this.where = where;
     }
 

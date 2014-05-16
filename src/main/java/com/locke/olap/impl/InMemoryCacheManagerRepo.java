@@ -78,32 +78,23 @@ public class InMemoryCacheManagerRepo<T extends Comparable> implements CacheMana
     @SuppressWarnings("unchecked")
     private boolean conditionIsContained(Condition exists, Condition current) {
 
-        if (isCompoundCondition(exists) || isCompoundCondition(current))
-            return false;
+        if (exists.getField().equals(current.getField())) {
 
-        else {
+            if (exists.getOperator().equals(current.getOperator())) {
 
-            if (exists.getField().equals(current.getField())) {
+                if (exists.getValue().getClass() != current.getValue().getClass()) return false;
 
-                if (exists.getOperator().equals(current.getOperator())) {
-
-                    if (exists.getValue().getClass() != current.getValue().getClass()) return false;
-
-                    switch (exists.getOperator()) {
-                        case GT: if (((T) exists.getValue()).compareTo(current.getValue()) < 0) return true; return false;
-                        case LT: if (((T)exists.getValue()).compareTo(current.getValue()) > 0) return true; return false;
-                        case EQ: if (exists.getValue().equals(current.getValue())) return true; return false;
-                        default: return false;
-                    }
+                switch (exists.getOperator()) {
+                    case GT: if (((T) exists.getValue()).compareTo(current.getValue()) < 0) return true; return false;
+                    case LT: if (((T)exists.getValue()).compareTo(current.getValue()) > 0) return true; return false;
+                    case EQ: if (exists.getValue().equals(current.getValue())) return true; return false;
+                    default: return false;
                 }
             }
         }
 
-        return false;
-    }
 
-    private boolean isCompoundCondition(Condition condition) {
-        return condition.getAnd() != null || condition.getOr() != null;
+        return false;
     }
 
     @Override

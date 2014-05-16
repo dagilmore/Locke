@@ -2,11 +2,8 @@ package com.locke.olap.impl;
 
 import com.locke.IntegrationTestCase;
 import com.locke.olap.WarehouseRepo;
-import com.locke.olap.models.Condition;
+import com.locke.olap.models.*;
 import com.locke.olap.models.Condition.Operator;
-import com.locke.olap.models.DataNode;
-import com.locke.olap.models.SelectView;
-import com.locke.olap.models.TableView;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -79,9 +76,10 @@ public class H2JdbcWarehouseRepoIntegrationTest extends IntegrationTestCase {
         Map<String, String> functions = new HashMap<>();
         functions.put("amount", "SUM");
 
-        List<Condition> where = new LinkedList<>();
-        where.add(new Condition("test_cats", "name", "'tom'", Operator.EQ));
-        where.add(new Condition("test_cats", "type", "'cat'", Operator.EQ));
+        ConditionSet where = new ConditionSet();
+        where.and(new Condition("test_cats", "name", "'tom'", Operator.EQ));
+        where.and(new Condition("test_cats", "type", "'cat'", Operator.EQ));
+
 
         List<String> group = new LinkedList<>();
         group.add("name");

@@ -4,20 +4,17 @@ package com.locke.olap.models;
  * @author David Gilmore
  * @date 4/18/14
  */
-public class Condition<T> {
+public class Condition<T> extends Conditional {
 
-    public enum Operator { EQ, NE, GT, LT, GE, LE, }
+    public enum Operator { EQ, NE, GT, LT, GE, LE }
 
     private String view;
     private T field;
     private T value;
     private Operator operator;
-    private Condition and;
-    private Condition or;
 
     public Condition() {}
 
-//    @JsonCreator
     public Condition(String view, T field, T value, Operator operator) {
         this.view = view;
         this.field = field;
@@ -57,22 +54,6 @@ public class Condition<T> {
         this.operator = operator;
     }
 
-    public Condition getAnd() {
-        return and;
-    }
-
-    public void setAnd(Condition and) {
-        this.and = and;
-    }
-
-    public Condition getOr() {
-        return or;
-    }
-
-    public void setOr(Condition or) {
-        this.or = or;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -80,10 +61,8 @@ public class Condition<T> {
 
         Condition condition = (Condition) o;
 
-        if (and != null ? !and.equals(condition.and) : condition.and != null) return false;
         if (field != null ? !field.equals(condition.field) : condition.field != null) return false;
         if (operator != null ? !operator.equals(condition.operator) : condition.operator != null) return false;
-        if (or != null ? !or.equals(condition.or) : condition.or != null) return false;
         if (value != null ? !value.equals(condition.value) : condition.value != null) return false;
         if (view != null ? !view.equals(condition.view) : condition.view != null) return false;
 
@@ -96,8 +75,7 @@ public class Condition<T> {
         result = 31 * result + (field != null ? field.hashCode() : 0);
         result = 31 * result + (value != null ? value.hashCode() : 0);
         result = 31 * result + (operator != null ? operator.hashCode() : 0);
-        result = 31 * result + (and != null ? and.hashCode() : 0);
-        result = 31 * result + (or != null ? or.hashCode() : 0);
+
         return result;
     }
 }

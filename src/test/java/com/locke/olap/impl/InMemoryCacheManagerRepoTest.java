@@ -63,24 +63,7 @@ public class InMemoryCacheManagerRepoTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void testGetQueryExists__AndUpperLimitNotComputed() throws Exception {
 
-        Condition exists1 = new Condition("test_view", "field", 3, Operator.GT);
-        Condition exists2 = new Condition("test_view", "field", 10, Operator.LT);
-
-        exists1.setAnd(exists2);
-
-        this.cacheRepo.createResource("test_resource");
-
-        View testView = new SelectView();
-        testView.setName("test_view");
-        this.cacheRepo.createView("test_resource", testView);
-
-        this.cacheRepo.setQueryExists("test_resource", "test_view", exists1);
-
-        Condition curr1 = new Condition("test_view", "field", 5, Operator.GT);
-
-        assertEquals(false, this.cacheRepo.getQueryExists("test_resource", "test_view", curr1));
     }
 }

@@ -21,7 +21,8 @@ public class JsonViewSerde<T> implements ViewSerde {
         ObjectMapper mapper = new ObjectMapper();
 
         mapper.registerSubtypes(
-                  new NamedType(Condition.class, "condition")
+                  new NamedType(Condition.class, "simple")
+                , new NamedType(ConditionSet.class, "conditions")
                 , new NamedType(JoinView.class, "join")
                 , new NamedType(TableView.class, "table")
                 , new NamedType(SelectView.class, "select")
