@@ -5,12 +5,29 @@ import ca.krasnay.sqlbuilder.SubSelectBuilder;
 import com.locke.olap.ViewGenerator;
 import com.locke.olap.error.MalformedViewException;
 import com.locke.olap.models.*;
+import com.locke.olap.models.Condition.Operator;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author David Gilmore
  * @date 4/12/14
  */
 public class HiveQLViewGenerator implements ViewGenerator {
+
+    private Map<Condition.Operator, String> ops;
+
+    public HiveQLViewGenerator() {
+        this.ops = new HashMap<>();
+
+        this.ops.put(Operator.EQ, " = ");
+        this.ops.put(Operator.NE, " != ");
+        this.ops.put(Operator.GT, " > ");
+        this.ops.put(Operator.LT, " < ");
+        this.ops.put(Operator.GE, " >= ");
+        this.ops.put(Operator.LE, " <= ");
+    }
 
     @Override
     public String createQuery(View view) throws MalformedViewException {
@@ -30,7 +47,7 @@ public class HiveQLViewGenerator implements ViewGenerator {
             SelectBuilder builder = new SelectBuilder();
             String query = "";
 
-            switch (j.getType()) {
+            switch (j.getJoin()) {
                 case INNER: query = createQuery(j.getLeft()) + " join " + createQuery(j.getRight()); break;
                 case CROSS: query =  createQuery(j.getLeft()) + " cross join " + createQuery(j.getRight()); break;
                 case LEFT_OUTER: query =  createQuery(j.getLeft()) + " left outer join " + createQuery(j.getRight()); break;
@@ -40,13 +57,13 @@ public class HiveQLViewGenerator implements ViewGenerator {
 
             if (j.getOn() != null) {
                 for (Condition cond: j.getOn()) {
-                    builder.where(cond.getView() + "." + cond.getField() + cond.getOperator() + cond.getValue());
+                    builder.where(cond.getView() + "." + cond.getField() + ops.get(cond.getOperator()) + cond.getValue());
                 }
             }
 
             if (j.getWhere() != null) {
                 for (Condition cond: j.getWhere()) {
-                    builder.where(cond.getView() + "." + cond.getField() + cond.getOperator() + cond.getValue());
+                    builder.where(cond.getView() + "." + cond.getField() + ops.get(cond.getOperator()) + cond.getValue());
                 }
             }
 
@@ -89,7 +106,7 @@ public class HiveQLViewGenerator implements ViewGenerator {
 
             if (selectView.getWhere() != null) {
                 for (Condition cond: selectView.getWhere()) {
-                    query.where(cond.getView() + "." + cond.getField() + cond.getOperator() + cond.getValue());
+                    query.where(cond.getView() + "." + cond.getField() + ops.get(cond.getOperator()) + cond.getValue());
                 }
             }
 

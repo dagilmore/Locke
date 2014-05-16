@@ -12,7 +12,7 @@ import java.util.*;
  * @author David Gilmore
  * @date 4/10/14
  */
-public class InMemoryCacheManagerRepo implements CacheManagerRepo {
+public class InMemoryCacheManagerRepo<T extends Comparable> implements CacheManagerRepo {
 
     private Map<String, Map<String, View>> resourceViews;
     private Map<String, Map<String, Set<Condition>>> queryHistory;
@@ -90,9 +90,9 @@ public class InMemoryCacheManagerRepo implements CacheManagerRepo {
                     if (exists.getValue().getClass() != current.getValue().getClass()) return false;
 
                     switch (exists.getOperator()) {
-                        case ">": if (exists.getValue().compareTo(current.getValue()) < 0) return true; return false;
-                        case "<": if (exists.getValue().compareTo(current.getValue()) > 0) return true; return false;
-                        case "=": if (exists.getValue().equals(current.getValue())) return true; return false;
+                        case GT: if (((T) exists.getValue()).compareTo(current.getValue()) < 0) return true; return false;
+                        case LT: if (((T)exists.getValue()).compareTo(current.getValue()) > 0) return true; return false;
+                        case EQ: if (exists.getValue().equals(current.getValue())) return true; return false;
                         default: return false;
                     }
                 }

@@ -4,16 +4,21 @@ package com.locke.olap.models;
  * @author David Gilmore
  * @date 4/18/14
  */
-public class Condition<T extends Comparable> {
+public class Condition<T> {
+
+    public enum Operator { EQ, NE, GT, LT, GE, LE, }
 
     private String view;
     private T field;
     private T value;
-    private String operator;
+    private Operator operator;
     private Condition and;
     private Condition or;
 
-    public Condition(String view, T field, T value, String operator) {
+    public Condition() {}
+
+//    @JsonCreator
+    public Condition(String view, T field, T value, Operator operator) {
         this.view = view;
         this.field = field;
         this.value = value;
@@ -44,11 +49,11 @@ public class Condition<T extends Comparable> {
         this.value = value;
     }
 
-    public String getOperator() {
+    public Operator getOperator() {
         return operator;
     }
 
-    public void setOperator(String operator) {
+    public void setOperator(Operator operator) {
         this.operator = operator;
     }
 
@@ -96,3 +101,4 @@ public class Condition<T extends Comparable> {
         return result;
     }
 }
+

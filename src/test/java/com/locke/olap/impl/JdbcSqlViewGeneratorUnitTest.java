@@ -2,6 +2,7 @@ package com.locke.olap.impl;
 
 
 import com.locke.olap.models.Condition;
+import com.locke.olap.models.Condition.Operator;
 import com.locke.olap.models.JoinView;
 import com.locke.olap.models.SelectView;
 import com.locke.olap.models.TableView;
@@ -97,8 +98,8 @@ public class JdbcSqlViewGeneratorUnitTest {
         functions.put("amount", "SUM");
 
         List<Condition> where = new LinkedList<>();
-        where.add(new Condition("test_subquery", "name", "tom", "="));
-        where.add(new Condition("test_subquery", "type", "person", "="));
+        where.add(new Condition("test_subquery", "name", "tom", Operator.EQ));
+        where.add(new Condition("test_subquery", "type", "person", Operator.EQ));
 
         List<String> group = new LinkedList<>();
         group.add("name");
@@ -174,18 +175,18 @@ public class JdbcSqlViewGeneratorUnitTest {
             leftJoinView.setRight(leftRightTableView);
 
             List<Condition> on = new ArrayList<>(Arrays.asList(
-                    new Condition("", "cid", "opensecrets_id", "=")
+                    new Condition("", "cid", "opensecrets_id", Operator.EQ)
             ));
 
             List<Condition> where = new ArrayList<>(Arrays.asList(
-                    new Condition("", "cid", "'24K'", "=")
+                    new Condition("", "cid", "'24K'", Operator.EQ)
             ));
 
             List<String> group = new ArrayList<>(Arrays.asList("bioguide_id"));
 
             leftJoinView.setOn(on);
             leftJoinView.setWhere(where);
-            leftJoinView.setType(JoinView.Join.INNER);
+            leftJoinView.setJoin(JoinView.Join.INNER);
             leftJoinView.setGroup(group);
             leftJoinView.setName("pac_contributions");
 
@@ -221,13 +222,13 @@ public class JdbcSqlViewGeneratorUnitTest {
             rightJoinView.setRight(rightRightTableView);
 
             on = new ArrayList<>(Arrays.asList(
-                        new Condition("", "recip_id", "opensecrets_id", "=")
+                        new Condition("", "recip_id", "opensecrets_id", Operator.EQ)
             ));
 
 
             rightJoinView.setOn(on);
             rightJoinView.setWhere(where);
-            rightJoinView.setType(JoinView.Join.INNER);
+            rightJoinView.setJoin(JoinView.Join.INNER);
             rightJoinView.setGroup(group);
             rightJoinView.setName("individual_contributions");
 
@@ -243,16 +244,16 @@ public class JdbcSqlViewGeneratorUnitTest {
         joinView.setRight(rightJoinView);
 
 
-        joinView.setType(JoinView.Join.FULL_OUTER);
+        joinView.setJoin(JoinView.Join.FULL_OUTER);
 
         selectView.setFrom(joinView);
 
         on = new ArrayList<>(Arrays.asList(
-                new Condition("", "cid", "opensecrets_id", "=")
+                new Condition("", "cid", "opensecrets_id", Operator.EQ)
         ));
 
         where = new ArrayList<>(Arrays.asList(
-                new Condition("", "cid", "'24K'", "=")
+                new Condition("", "cid", "'24K'", Operator.EQ)
         ));
 
         String query = hiveQLViewGenerator.createQuery(selectView);

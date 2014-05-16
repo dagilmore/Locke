@@ -1,6 +1,7 @@
 package com.locke.olap.models;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author David Gilmore
@@ -15,7 +16,10 @@ public class JoinView extends View {
     private List<Condition> on;
     private List<Condition> where;
     private List<String> group;
-    private Join type;
+    private Join join;
+    private Map<String, String> functions;
+    private Map<String, String> alias;
+    private boolean distinct;
 
 
     public View getLeft() {
@@ -58,11 +62,35 @@ public class JoinView extends View {
         this.group = group;
     }
 
-    public Join getType() {
-        return type;
+    public Join getJoin() {
+        return join;
     }
 
-    public void setType(Join type) {
-        this.type = type;
+    public void setJoin(Join join) {
+        this.join = join;
+    }
+
+    public Map<String, String> getFunctions() {
+        return functions;
+    }
+
+    public void setFunctions(Map<String, String> functions) {
+        this.functions = functions;
+    }
+
+    public Map<String, String> getAlias() {
+        return alias;
+    }
+
+    public void setAlias(Map<String, String> alias) {
+        this.alias = alias;
+    }
+
+    public boolean isDistinct() {
+        return distinct;
+    }
+
+    public void setDistinct(boolean distinct) {
+        this.distinct = distinct;
     }
 }

@@ -1,6 +1,7 @@
 package com.locke.olap.impl;
 
 import com.locke.olap.models.Condition;
+import com.locke.olap.models.Condition.Operator;
 import com.locke.olap.models.SelectView;
 import com.locke.olap.models.View;
 import org.junit.Before;
@@ -46,7 +47,7 @@ public class InMemoryCacheManagerRepoTest {
     @SuppressWarnings("unchecked")
     public void testGetQueryExists__Simple() throws Exception {
 
-        Condition exists1 = new Condition("test_view", "field", 3, ">");
+        Condition exists1 = new Condition("test_view", "field", 3, Operator.GT);
 
         this.cacheRepo.createResource("test_resource");
 
@@ -56,7 +57,7 @@ public class InMemoryCacheManagerRepoTest {
 
         this.cacheRepo.setQueryExists("test_resource", "test_view", exists1);
 
-        Condition curr1 = new Condition("test_view", "field", 5, ">");
+        Condition curr1 = new Condition("test_view", "field", 5, Operator.GT);
 
         assertEquals(true, this.cacheRepo.getQueryExists("test_resource", "test_view", curr1));
     }
@@ -65,8 +66,8 @@ public class InMemoryCacheManagerRepoTest {
     @SuppressWarnings("unchecked")
     public void testGetQueryExists__AndUpperLimitNotComputed() throws Exception {
 
-        Condition exists1 = new Condition("test_view", "field", 3, ">");
-        Condition exists2 = new Condition("test_view", "field", 10, "<");
+        Condition exists1 = new Condition("test_view", "field", 3, Operator.GT);
+        Condition exists2 = new Condition("test_view", "field", 10, Operator.LT);
 
         exists1.setAnd(exists2);
 
@@ -78,7 +79,7 @@ public class InMemoryCacheManagerRepoTest {
 
         this.cacheRepo.setQueryExists("test_resource", "test_view", exists1);
 
-        Condition curr1 = new Condition("test_view", "field", 5, ">");
+        Condition curr1 = new Condition("test_view", "field", 5, Operator.GT);
 
         assertEquals(false, this.cacheRepo.getQueryExists("test_resource", "test_view", curr1));
     }

@@ -69,7 +69,7 @@ public class HolapClientImplIntegrationTest extends IntegrationTestCase {
         this.holapClient.createResource("philosophers");
         this.holapClient.createView("philosophers", simpleSelect);
 
-        this.holapClient.query("philosophers", "", new Condition("","","",""));
+        this.holapClient.query("philosophers", "", new Condition("","","", Condition.Operator.EQ));
 
         //Assert that mongoDB was updated appropriately
         DBCollection coll = mongoDB.getCollection("philosophers");
@@ -82,7 +82,7 @@ public class HolapClientImplIntegrationTest extends IntegrationTestCase {
         //Destroy datawarehouse tables to ensure that future queries come from the cube
         destroyTables();
 
-        DataNode data = this.holapClient.query("philosophers", "", new Condition("","","",""));
+        DataNode data = this.holapClient.query("philosophers", "", new Condition("","","", Condition.Operator.EQ));
         assertEquals(50, ( (List) data.getData()).size());
     }
 }
