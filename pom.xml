@@ -2,14 +2,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.locke</groupId>
-    <artifactId>Locke</artifactId>
-    <packaging>jar</packaging>
-    <version>0.1</version>
-    <name>Locke</name>
+    <artifactId>locke</artifactId>
+    <packaging>pom</packaging>
+    <version>0.1.0</version>
+    <modules>
+        <module>locke-core</module>
+        <module>locke-dist</module>
+        <module>locke-server</module>
+    </modules>
+    <name>locke</name>
 
     <properties>
         <spring.version>4.0.3.RELEASE</spring.version>
         <querydsl.version>3.3.2</querydsl.version>
+        <scala.version>2.10.2</scala.version>
     </properties>
 
     <dependencies>
@@ -136,21 +142,16 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.6.1</version>
         </dependency>
-
         <dependency>
-            <groupId>ca.krasnay</groupId>
-            <artifactId>sqlbuilder</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/sqlbuilder-1.0-SNAPSHOT.jar</systemPath>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-compiler</artifactId>
+            <version>${scala.version}</version>
+            <scope>compile</scope>
         </dependency>
-
         <dependency>
-            <artifactId>org.restsql</artifactId>
-            <groupId>restsql</groupId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/restsql-1.0.jar</systemPath>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
         </dependency>
 
     </dependencies>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.locke</groupId>
+        <artifactId>locke</artifactId>
+        <version>0.1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.locke.core</groupId>
+    <artifactId>locke-core</artifactId>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>ca.krasnay</groupId>
+            <artifactId>sqlbuilder</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/sqlbuilder-1.0-SNAPSHOT.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <artifactId>org.restsql</artifactId>
+            <groupId>restsql</groupId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/restsql-1.0.jar</systemPath>
+        </dependency>
+
+    </dependencies>
+
+</project>
